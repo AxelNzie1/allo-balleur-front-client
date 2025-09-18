@@ -1,8 +1,8 @@
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { signInWithPhoneNumber, RecaptchaVerifier } from "firebase/auth";
-import { auth } from "../firebaseClient";
+import { auth } from "../firebaseClient"; // ton instance Firebase
+import { signInWithCustomToken, RecaptchaVerifier } from "firebase/auth";
 import "./Register.css";
 
 export default function Register() {
@@ -17,8 +17,6 @@ export default function Register() {
   });
   const [profileImage, setProfileImage] = useState(null);
   const [error, setError] = useState("");
-  const [otpCode, setOtpCode] = useState("");
-  const [showOtpInput, setShowOtpInput] = useState(false);
   const [confirmationResult, setConfirmationResult] = useState(null);
   const [showBonusPopup, setShowBonusPopup] = useState(false);
   const [verificationMethod, setVerificationMethod] = useState(""); // "email" ou "sms"
@@ -33,25 +31,25 @@ export default function Register() {
     setError("");
 
     try {
-      // Choix de la méthode avant l'envoi
-      const method = window.confirm(
-        "Voulez-vous recevoir l'OTP par SMS ? Cliquer sur 'Annuler' pour recevoir par email"
-      )
-        ? "sms"
-        : "email";
-      setVerificationMethod(method);
-
-      // Préparer FormData
+      // FormData pour envoi multipart
       const data = new FormData();
       data.append("email", formData.email);
       data.append("full_name", formData.full_name);
       data.append("phone", formData.phone);
       data.append("password", formData.password);
       data.append("role", formData.role);
-      data.append("method", method); // <- IMPORTANT
       if (profileImage) data.append("profile_image", profileImage);
 
-      // Envoyer au backend
+      // Choix de la méthode SMS ou Email
+      const method = window.confirm(
+        "Voulez-vous recevoir l'OTP par SMS ? Cliquer sur 'Annuler' pour recevoir par email"
+      )
+        ? "sms"
+        : "email";
+      setVerificationMethod(method);
+      data.append("method", method);
+
+      // Envoi au backend
       const response = await axios.post(
         "https://allo-bailleur-backend-1.onrender.com/auth/start-registration",
         data,
@@ -59,41 +57,23 @@ export default function Register() {
       );
 
       if (method === "sms") {
-        // OTP SMS
-        window.recaptchaVerifier = new RecaptchaVerifier(
-          "recaptcha-container",
-          { size: "invisible" },
-          auth
-        );
+        const token = response.data.sms_custom_token;
 
-        const result = await signInWithPhoneNumber(
-          auth,
-          formData.phone,
-          window.recaptchaVerifier
-        );
-        setConfirmationResult(result);
-        setShowOtpInput(true);
+        // Connecte l'utilisateur avec le token custom Firebase
+        const userCredential = await signInWithCustomToken(auth, token);
+        console.log("Utilisateur connecté avec custom token:", userCredential.user);
+
+        // Afficher le popup bonus directement si la vérification côté backend est OK
+        setShowBonusPopup(true);
       } else {
-        // OTP Email
         setEmailLink(response.data.email_verification_link);
         alert(
           "Un lien de vérification a été envoyé à votre email. Cliquez dessus pour valider votre compte."
         );
       }
     } catch (err) {
+      console.error(err);
       setError(err.response?.data?.detail || "Erreur lors de l'inscription");
-      console.error(err);
-    }
-  };
-
-  const handleVerifyOtp = async () => {
-    if (!confirmationResult) return;
-    try {
-      await confirmationResult.confirm(otpCode);
-      setShowBonusPopup(true);
-    } catch (err) {
-      setError("Code OTP invalide");
-      console.error(err);
     }
   };
 
@@ -108,76 +88,31 @@ export default function Register() {
         <h2>Inscription</h2>
         {error && <p style={{ color: "red" }}>{error}</p>}
 
-        {!showOtpInput && !emailLink ? (
+        {!showBonusPopup && !emailLink && (
           <form onSubmit={handleSubmit} encType="multipart/form-data">
             <label>Email:</label>
-            <input
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              required
-            />
-
+            <input type="email" name="email" value={formData.email} onChange={handleChange} required />
             <label>Nom complet:</label>
-            <input
-              type="text"
-              name="full_name"
-              value={formData.full_name}
-              onChange={handleChange}
-              required
-            />
-
+            <input type="text" name="full_name" value={formData.full_name} onChange={handleChange} required />
             <label>Téléphone:</label>
-            <input
-              type="text"
-              name="phone"
-              value={formData.phone}
-              onChange={handleChange}
-              placeholder="+33612345678"
-              required
-            />
-
+            <input type="text" name="phone" value={formData.phone} onChange={handleChange} required />
             <label>Mot de passe:</label>
-            <input
-              type="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              required
-            />
-
+            <input type="password" name="password" value={formData.password} onChange={handleChange} required />
             <label>Rôle:</label>
-            <select
-              name="role"
-              value={formData.role}
-              onChange={handleChange}
-              required
-            >
+            <select name="role" value={formData.role} onChange={handleChange} required>
               <option value="client">Client</option>
               <option value="bailleur">Bailleur</option>
             </select>
-
             <label>Image de profil (optionnel):</label>
             <input type="file" accept="image/*" onChange={handleFileChange} />
-
             <button type="submit">S’inscrire</button>
           </form>
-        ) : verificationMethod === "sms" ? (
-          <div>
-            <label>Entrez le code OTP reçu par SMS:</label>
-            <input
-              type="text"
-              value={otpCode}
-              onChange={(e) => setOtpCode(e.target.value)}
-            />
-            <button onClick={handleVerifyOtp}>Vérifier OTP</button>
-          </div>
-        ) : (
+        )}
+
+        {emailLink && (
           <div>
             <p>
-              Un lien de vérification a été envoyé à votre email. Vérifiez votre
-              boîte de réception pour activer le compte.
+              Un lien de vérification a été envoyé à votre email. Vérifiez votre boîte de réception pour activer le compte.
             </p>
             <a href={emailLink} target="_blank" rel="noopener noreferrer">
               Cliquer pour vérifier l'email
@@ -195,8 +130,7 @@ export default function Register() {
             <p>
               Félicitations <strong>{formData.full_name || "cher utilisateur"}</strong> !
               <br />
-              Votre compte a été créé avec succès et vous venez de recevoir
-              <strong> 150 tokens gratuits </strong> en tant que nouveau client.
+              Votre compte a été créé avec succès et vous venez de recevoir <strong>150 tokens gratuits</strong>.
             </p>
             <button onClick={handleClosePopup}>Super, merci !</button>
           </div>
