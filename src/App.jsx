@@ -20,13 +20,8 @@ function App() {
           <Route path="/modifier-bien/:id" element={<ModifierBien />} />
           <Route path="/properties" element={<PropertiesSearchPage />} />
           <Route path="/properties/:propertyId" element={<PropertyDetail />} />
-
         </Routes>
       </div>
-      <div id="recaptcha-container"></div>
-
     </>
   );
 }
-
-export default App;
