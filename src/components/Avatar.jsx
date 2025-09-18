@@ -1,4 +1,4 @@
-import "./avatar.css";
+import "./Avatar.css";
 
 export function Avatar({ src, alt = "avatar", size = 40 }) {
   return (

@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from "react";
-import { Avatar } from "./avatar";
+import { Avatar } from "./Avatar";
 import { useNavigate } from "react-router-dom";
 import "./UserMenu.css";
 
