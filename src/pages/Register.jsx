@@ -19,9 +19,8 @@ export default function Register() {
   const [profileImage, setProfileImage] = useState(null);
   const [error, setError] = useState("");
   const [confirmationResult, setConfirmationResult] = useState(null);
-  const [verificationMethod, setVerificationMethod] = useState(""); // sms | email
+  const [verificationMethod, setVerificationMethod] = useState(""); // "email" | "sms"
   const [emailLink, setEmailLink] = useState("");
-  const [showBonusPopup, setShowBonusPopup] = useState(false);
 
   const handleChange = (e) =>
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -33,13 +32,10 @@ export default function Register() {
     setError("");
 
     try {
-      // Normalisation du numéro au format E.164
-      let phoneNumber = formData.phone;
-      if (!phoneNumber.startsWith("+")) {
-        phoneNumber = "+237" + phoneNumber.replace(/\D/g, "");
-      }
+      // Normaliser numéro au format E.164
+      let phoneNumber = formData.phone.replace(/\D/g, "");
+      if (!phoneNumber.startsWith("+")) phoneNumber = "+237" + phoneNumber;
 
-      // Préparer FormData pour le backend
       const data = new FormData();
       data.append("email", formData.email);
       data.append("full_name", formData.full_name);
@@ -48,24 +44,23 @@ export default function Register() {
       data.append("role", formData.role);
       if (profileImage) data.append("profile_image", profileImage);
 
-      // Choix de la méthode de vérification
+      // Choix méthode
       const method = window.confirm(
-        "Voulez-vous recevoir l'OTP par SMS ? (OK = SMS / Annuler = Email)"
+        "Recevoir OTP par SMS ? (OK = SMS / Annuler = Email)"
       )
         ? "sms"
         : "email";
       setVerificationMethod(method);
       data.append("method", method);
 
-      // Appel backend pour créer l'utilisateur
+      // Appel backend
       const response = await axios.post(
         "https://allo-bailleur-backend-1.onrender.com/auth/start-registration",
-        data,
-        { headers: { "Content-Type": "multipart/form-data" } }
+        data
       );
 
       if (method === "sms") {
-        // 1️⃣ Crée le Recaptcha invisible si pas déjà créé
+        // Recaptcha invisible obligatoire
         if (!window.recaptchaVerifier) {
           window.recaptchaVerifier = new RecaptchaVerifier(
             "recaptcha-container",
@@ -74,35 +69,23 @@ export default function Register() {
           );
         }
 
-        // 2️⃣ Envoi du SMS via Firebase Auth
+        // Envoi SMS réel via Firebase
         const confirmation = await signInWithPhoneNumber(
           auth,
           phoneNumber,
           window.recaptchaVerifier
         );
         setConfirmationResult(confirmation);
-        alert("OTP envoyé par SMS ! Vérifiez votre téléphone.");
       } else if (method === "email") {
         setEmailLink(response.data.email_verification_link);
         alert(
-          "Un lien de vérification a été envoyé à votre email. Cliquez dessus pour valider votre compte."
+          "Lien de vérification envoyé à votre email. Cliquez dessus pour valider votre compte."
         );
       }
     } catch (err) {
       console.error(err);
-      setError(err.response?.data?.detail || err.message || "Erreur lors de l'inscription");
+      setError(err.response?.data?.detail || err.message || "Erreur inscription");
     }
-  };
-
-  const handleOtpVerified = (user) => {
-    // Appelé après validation OTP
-    alert(`Bienvenue ${user.phoneNumber || formData.full_name} !`);
-    setShowBonusPopup(true);
-  };
-
-  const handleClosePopup = () => {
-    setShowBonusPopup(false);
-    navigate("/");
   };
 
   return (
@@ -111,8 +94,7 @@ export default function Register() {
         <h2>Inscription</h2>
         {error && <p style={{ color: "red" }}>{error}</p>}
 
-        {/* Formulaire d'inscription */}
-        {!showBonusPopup && !emailLink && !confirmationResult && (
+        {!emailLink && !confirmationResult && (
           <form onSubmit={handleSubmit} encType="multipart/form-data">
             <label>Email:</label>
             <input
@@ -168,45 +150,25 @@ export default function Register() {
           </form>
         )}
 
-        {/* Lien de vérification email */}
         {emailLink && (
           <div>
             <p>
-              Un lien de vérification a été envoyé à votre email. Vérifiez votre
-              boîte de réception.
+              Vérifiez votre boîte email et cliquez sur le lien pour confirmer votre compte.
             </p>
             <a href={emailLink} target="_blank" rel="noopener noreferrer">
-              Cliquer pour vérifier l'email
+              Vérifier l'email
             </a>
           </div>
         )}
 
-        {/* OTP pour SMS */}
-        {verificationMethod === "sms" && confirmationResult && (
-          <AuthOtp
-            confirmationResult={confirmationResult}
-            onVerified={handleOtpVerified}
-          />
+        {confirmationResult && (
+          <div style={{ marginTop: "1rem" }}>
+            <AuthOtp confirmationResult={confirmationResult} />
+          </div>
         )}
 
-        {/* Recaptcha container requis par Firebase */}
         <div id="recaptcha-container"></div>
       </div>
-
-      {/* Popup bonus après création de compte */}
-      {showBonusPopup && (
-        <div className="bonus-popup-overlay">
-          <div className="bonus-popup">
-            <h3>🎉 Bienvenue !</h3>
-            <p>
-              Félicitations <strong>{formData.full_name || "cher utilisateur"}</strong> !<br />
-              Votre compte a été créé avec succès et vous venez de recevoir{" "}
-              <strong>150 tokens gratuits</strong>.
-            </p>
-            <button onClick={handleClosePopup}>Super, merci !</button>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
