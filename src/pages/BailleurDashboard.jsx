@@ -10,7 +10,7 @@ import Visites from './sections/Mes visites';
 import Messagerie from './sections/Messagerie';
 import Profil from './sections/BailleurProfil';
 import Abonnements from './sections/MesAbonnements';
-import MesPreferences from './sections/preferences';
+import MesPreferences from './sections/Preferences';
 
 import "../pages/BailleurDashboard.css";
 
