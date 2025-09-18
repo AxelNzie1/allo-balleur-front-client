@@ -1,0 +1,1081 @@
+/* PropertyDetails.css - Version Responsive */
+
+.pd-container {
+  max-width: 2200px;
+  margin: 80px auto 20px;
+  padding: 0 15px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #333;
+  box-sizing: border-box;
+}
+
+/* Loading, Error and No Data States */
+.pd-loading, .pd-error, .pd-no-data {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 300px;
+  text-align: center;
+  padding: 20px;
+}
+
+.pd-loading-spinner {
+  width: 50px;
+  height: 50px;
+  border: 5px solid #f3f3f3;
+  border-top: 5px solid #3498db;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 20px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.pd-error-icon, .pd-no-data-icon {
+  font-size: 3rem;
+  margin-bottom: 20px;
+}
+
+.pd-retry-btn {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 20px;
+  transition: background-color 0.3s;
+}
+
+.pd-retry-btn:hover {
+  background-color: #2980b9;
+}
+
+/* Property Card Layout */
+.pd-card {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 20px;
+  gap: 30px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.pd-image-carousel {
+  flex: 1;
+  min-width: 600px;
+}
+
+.pd-info-section {
+  flex: 1;
+  min-width: 400px;
+  padding: 0;
+}
+
+/* Image Carousel Styles */
+.pd-carousel-image {
+  width: 100%;
+  height: 600px;
+  object-fit: cover;
+  border-radius: 8px;
+  transition: opacity 0.3s ease;
+}
+
+.pd-carousel-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  margin: 15px 0;
+}
+
+.pd-carousel-btn {
+  background: #d80d68;
+  color: white;
+  border: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.pd-carousel-btn:hover {
+  background: #d80d68;
+  transform: scale(1.1);
+  opacity: 0.8;
+}
+
+.pd-carousel-icon {
+  font-size: 1rem;
+}
+
+.pd-carousel-counter {
+  font-weight: 500;
+  color: #555;
+}
+
+.pd-thumbnails {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding: 10px 5px;
+  margin-bottom: 20px;
+  scrollbar-width: thin;
+}
+
+.pd-thumbnail {
+  width: 80px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: transform 0.3s, box-shadow 0.3s;
+  border: 2px solid transparent;
+}
+
+.pd-thumbnail:hover {
+  transform: scale(1.05);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+}
+
+.pd-thumbnail.pd-active {
+  border-color: #d80d68;
+  transform: scale(1.05);
+}
+
+/* Description Box */
+.pd-description-box {
+  background: #f8f9fa;
+  padding: 20px;
+  border-radius: 8px;
+  margin-top: 20px;
+}
+
+.pd-description-box h2 {
+  margin-top: 0;
+  color: #000;
+  border-bottom: 2px solid #ddd;
+  padding-bottom: 10px;
+  font-size: 1.5rem;
+}
+
+.pd-description-box p {
+  line-height: 1.6;
+  color: #444;
+  font-size: 1rem;
+}
+
+/* Property Header */
+.pd-header h1 {
+  margin: 0 0 10px 0;
+  color: #d80d68;
+  font-size: 1.8rem;
+  line-height: 1.2;
+}
+
+.pd-sub-info {
+  color: #7f8c8d;
+  margin: 5px 0 20px;
+  font-size: 1rem;
+}
+
+/* Interaction Section */
+.pd-interaction-section {
+  margin-bottom: 30px;
+}
+
+.pd-like-section {
+  margin-bottom: 20px;
+}
+
+.pd-like-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #ffffff;
+  border: 1px solid #d80d68;
+  padding: 10px 15px;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-size: 0.9rem;
+  width: fit-content;
+}
+
+.pd-like-btn:hover {
+  background: #fff5f8;
+}
+
+.pd-like-btn.pd-liked {
+  background: #d80d68;
+  border-color: #d80d68;
+  color: #ffffff;
+}
+
+.pd-like-btn.pd-disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.pd-heart-icon {
+  font-size: 1.2rem;
+  transition: transform 0.3s;
+}
+
+.pd-heart-icon.pd-filled {
+  color: #ffffff;
+}
+
+.pd-like-btn:hover .pd-heart-icon {
+  transform: scale(1.1);
+}
+
+.pd-favorites-note {
+  margin-top: 10px;
+  font-size: 0.8rem;
+  color: #d80d68;
+  padding: 5px 10px;
+  background: #ffeaf1;
+  border-radius: 5px;
+  border-left: 3px solid #d80d68;
+  max-width: 300px;
+}
+
+/* Rating Section */
+.pd-rating-section {
+  margin-bottom: 20px;
+}
+
+.pd-rating-section h3 {
+  margin: 0 0 10px;
+  font-size: 1.1rem;
+  color: #2c3e50;
+}
+
+.pd-star-rating {
+  display: flex;
+  gap: 5px;
+  margin-bottom: 5px;
+}
+
+.pd-star {
+  color: #ddd;
+  cursor: pointer;
+  font-size: 1.5rem;
+  transition: color 0.2s, transform 0.2s;
+}
+
+.pd-star.pd-filled {
+  color: #ff008c;
+}
+
+.pd-star:hover {
+  transform: scale(1.2);
+}
+
+.pd-star.pd-disabled {
+  cursor: not-allowed;
+}
+
+.pd-rating-info {
+  margin: 5px 0 0;
+  font-size: 0.9rem;
+  color: #7f8c8d;
+}
+
+.pd-rating-value {
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+.pd-rating-count {
+  color: #ff008c;
+}
+
+/* Section Separator */
+.pd-section-separator {
+  height: 1px;
+  background: linear-gradient(to right, transparent, #ddd, transparent);
+  margin: 25px 0;
+}
+
+/* Card Grid */
+.pd-card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+/* Styles pour le bouton d'engagement */
+.pd-engagement-section {
+  margin: 15px 0;
+  padding: 10px;
+  border-radius: 8px;
+  background-color: #f8f9fa;
+}
+
+.pd-engagement-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background-color: #e9ecef;
+  border: 1px solid #ced4da;
+  border-radius: 20px;
+  color: #495057;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  width: fit-content;
+}
+
+.pd-engagement-btn:hover:not(:disabled) {
+  background-color: #dee2e6;
+}
+
+.pd-engagement-btn.pd-engaged {
+  background-color: #d4edda;
+  border-color: #c3e6cb;
+  color: #155724;
+}
+
+.pd-engagement-btn.pd-disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.pd-engagement-icon {
+  font-size: 1.2em;
+}
+
+.pd-engagement-note {
+  margin-top: 5px;
+  font-size: 0.8em;
+  color: #6c757d;
+  max-width: 300px;
+}
+
+/* Styles pour la réservation VIP */
+.pd-reservation-section {
+  margin: 20px 0;
+  padding: 15px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+}
+
+.pd-reserve-btn {
+  width: 100%;
+  padding: 12px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  max-width: 300px;
+}
+
+.pd-reserve-btn:hover {
+  background-color: #218838;
+}
+
+.pd-reserve-btn:disabled {
+  background-color: #6c757d;
+  cursor: not-allowed;
+}
+
+.pd-reservation-docs {
+  padding: 15px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  margin-bottom: 15px;
+}
+
+.pd-doc-upload {
+  margin: 15px 0;
+  padding: 10px;
+  border: 1px dashed #ddd;
+  border-radius: 5px;
+}
+
+.pd-doc-upload label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.pd-reservation-status {
+  padding: 15px;
+  border-radius: 8px;
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.pd-reservation-status.pending {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.pd-reservation-status.approved {
+  background: #d4edda;
+  color: #155724;
+}
+
+.pd-reservation-status.rejected {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+.pd-vip-upgrade {
+  display: block;
+  color: #d63384;
+  margin-top: 8px;
+  font-weight: 500;
+}
+
+.pd-terms-content {
+  max-height: 300px;
+  overflow-y: auto;
+  margin: 15px 0;
+  padding: 15px;
+  background: #f8f9fa;
+  border-radius: 5px;
+}
+
+.pd-download-terms {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 10px;
+  color: #0d6efd;
+  text-decoration: none;
+}
+
+.pd-info-card {
+  background: #f8f9fa;
+  border-radius: 8px;
+  padding: 15px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.pd-info-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+}
+
+.pd-info-icon {
+  font-size: 1.5rem;
+  color: #3498db;
+}
+
+.pd-info-card strong {
+  display: block;
+  font-size: 0.8rem;
+  color: #7f8c8d;
+}
+
+.pd-info-card p {
+  margin: 5px 0 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #ff008c;
+}
+
+/* Owner Info */
+.pd-owner-info h2 {
+  margin: 0 0 15px;
+  color: #000;
+  font-size: 1.3rem;
+}
+
+.pd-phone-number {
+  color: #ff008c;
+  font-weight: bold;
+  word-break: break-all;
+}
+
+.pd-view-phone-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: #ff008c;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  font-size: 0.9rem;
+}
+
+.pd-view-phone-btn:hover {
+  background: #e0007c;
+}
+
+.pd-phone-icon {
+  font-size: 0.9rem;
+}
+
+.pd-error-text {
+  color: #e74c3c;
+  font-size: 0.8rem;
+  margin-top: 5px;
+}
+
+/* Report Section */
+.pd-report-section {
+  margin-top: 20px;
+}
+
+.pd-report-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: #fff;
+  border: 1px solid #e74c3c;
+  color: #e74c3c;
+  padding: 8px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-size: 0.9rem;
+}
+
+.pd-report-btn:hover {
+  background: #fdedec;
+}
+
+.pd-report-icon {
+  font-size: 0.9rem;
+}
+
+/* Styles pour le bouton de contact */
+.pd-contact-section {
+  margin: 20px 0;
+  text-align: center;
+  padding: 15px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #e9ecef;
+}
+
+.pd-contact-btn {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.pd-contact-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+/* Popups and Dialogs */
+.pd-popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s;
+  padding: 15px;
+  box-sizing: border-box;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.pd-popup-content {
+  background: white;
+  border-radius: 10px;
+  padding: 25px;
+  width: 100%;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+  position: relative;
+  animation: slideUp 0.3s;
+}
+
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.pd-token-popup {
+  text-align: center;
+}
+
+.pd-popup-close-btn {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #95a5a6;
+  transition: color 0.3s;
+  z-index: 10;
+}
+
+.pd-popup-close-btn:hover {
+  color: #e74c3c;
+}
+
+.pd-popup-header h3 {
+  margin-top: 0;
+  color: #ff008c;
+}
+
+.pd-popup-header p {
+  color: #7f8c8d;
+  margin-bottom: 5px;
+}
+
+.pd-popup-buttons {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  margin-top: 25px;
+  flex-wrap: wrap;
+}
+
+.pd-popup-btn {
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-weight: bold;
+  border: none;
+  min-width: 120px;
+}
+
+.pd-popup-btn-primary {
+  background: #ff008c;
+  color: white;
+}
+
+.pd-popup-btn-primary:hover {
+  background: #e0007c;
+}
+
+.pd-popup-btn-secondary {
+  background: #95a5a6;
+  color: white;
+}
+
+.pd-popup-btn-secondary:hover {
+  background: #7f8c8d;
+}
+
+.pd-token-info, .pd-token-warning {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin: 15px 0;
+  flex-wrap: wrap;
+}
+
+.pd-token-icon {
+  font-size: 2rem;
+  color: #f1c40f;
+}
+
+.pd-token-icon.pd-warning {
+  color: #e74c3c;
+}
+
+/* Report Dialog */
+.pd-report-dialog-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s;
+  padding: 15px;
+  box-sizing: border-box;
+}
+
+.pd-report-dialog {
+  background: white;
+  border-radius: 10px;
+  padding: 30px;
+  width: 100%;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+  position: relative;
+  animation: slideUp 0.3s;
+}
+
+.pd-report-dialog h3 {
+  margin-top: 0;
+  color: #d80d68;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 10px;
+}
+
+.pd-report-reasons {
+  margin: 15px 0;
+}
+
+.pd-reason-option {
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  padding: 8px;
+  border-radius: 5px;
+  transition: background 0.2s;
+}
+
+.pd-reason-option:hover {
+  background: #f5f5f5;
+}
+
+.pd-reason-option input {
+  margin-right: 10px;
+}
+
+.pd-reason-option label {
+  cursor: pointer;
+  flex-grow: 1;
+}
+
+.pd-report-textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  resize: vertical;
+  min-height: 100px;
+  margin-top: 10px;
+  font-family: inherit;
+  transition: border 0.3s;
+  box-sizing: border-box;
+}
+
+.pd-report-textarea:focus {
+  border-color: #ff008c;
+  outline: none;
+}
+
+.pd-report-error {
+  color: #e74c3c;
+  background: #fdedec;
+  padding: 10px;
+  border-radius: 5px;
+  margin: 10px 0;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.pd-report-success {
+  text-align: center;
+  padding: 20px;
+}
+
+.pd-success-icon {
+  font-size: 3rem;
+  color: #27ae60;
+  margin-bottom: 15px;
+}
+
+.pd-dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+
+.pd-close-dialog-btn {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #95a5a6;
+  transition: color 0.3s;
+}
+
+.pd-close-dialog-btn:hover {
+  color: #e74c3c;
+}
+
+.pd-spinner {
+  width: 20px;
+  height: 20px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: white;
+  animation: spin 1s ease-in-out infinite;
+  display: inline-block;
+}
+
+.pd-spinner.pd-small {
+  width: 15px;
+  height: 15px;
+  border-width: 2px;
+}
+
+/* Styles pour la zone de texte du message */
+.pd-message-textarea {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 14px;
+  resize: vertical;
+  margin: 15px 0;
+  min-height: 120px;
+  transition: border-color 0.3s ease;
+  box-sizing: border-box;
+}
+
+.pd-message-textarea:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.pd-message-textarea::placeholder {
+  color: #a0aec0;
+}
+
+/* ============================ */
+/* RESPONSIVE DESIGN */
+/* ============================ */
+
+/* Tablets and small desktops */
+@media (max-width: 1024px) {
+  .pd-container {
+    margin-top: 90px;
+  }
+  
+  .pd-card {
+    padding: 15px;
+    gap: 20px;
+  }
+  
+  .pd-carousel-image {
+    height: 550px;
+  }
+}
+
+/* Tablets */
+@media (max-width: 768px) {
+  .pd-card {
+    flex-direction: column;
+  }
+  
+  .pd-image-carousel, .pd-info-section {
+    min-width: 100%;
+  }
+  
+  .pd-carousel-image {
+    height: 300px;
+  }
+  
+  .pd-card-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .pd-header h1 {
+    font-size: 1.5rem;
+  }
+}
+
+/* Large phones */
+@media (max-width: 600px) {
+  .pd-container {
+    margin-top: 80px;
+    padding: 0 10px;
+  }
+  
+  .pd-card {
+    padding: 10px;
+    gap: 15px;
+  }
+  
+  .pd-carousel-image {
+    height: 450px;
+  }
+  
+  .pd-thumbnail {
+    width: 60px;
+    height: 45px;
+  }
+  
+  .pd-carousel-controls {
+    gap: 10px;
+  }
+  
+  .pd-carousel-btn {
+    width: 35px;
+    height: 35px;
+  }
+  
+  .pd-info-card {
+    padding: 10px;
+  }
+  
+  .pd-info-icon {
+    font-size: 1.2rem;
+  }
+  
+  .pd-like-btn, .pd-engagement-btn {
+    padding: 8px 12px;
+    font-size: 0.8rem;
+  }
+  
+  .pd-popup-content, .pd-report-dialog {
+    padding: 20px;
+  }
+  
+  .pd-popup-buttons, .pd-dialog-actions {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .pd-popup-btn {
+    width: 100%;
+  }
+}
+
+/* Small phones */
+@media (max-width: 480px) {
+  .pd-carousel-image {
+    height: 200px;
+  }
+  
+  .pd-header h1 {
+    font-size: 1.3rem;
+  }
+  
+  .pd-card-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  
+  .pd-section-separator {
+    margin: 15px 0;
+  }
+  
+  .pd-star-rating {
+    gap: 3px;
+  }
+  
+  .pd-star {
+    font-size: 1.2rem;
+  }
+  
+  .pd-thumbnails {
+    gap: 5px;
+  }
+  
+  .pd-thumbnail {
+    width: 50px;
+    height: 40px;
+  }
+  
+  .pd-description-box {
+    padding: 15px;
+  }
+  
+  .pd-description-box h2 {
+    font-size: 1.2rem;
+  }
+  
+  .pd-contact-btn {
+    padding: 10px 15px;
+    font-size: 13px;
+  }
+  
+  .pd-view-phone-btn {
+    padding: 6px 10px;
+    font-size: 0.8rem;
+  }
+  
+  .pd-reserve-btn {
+    max-width: 100%;
+  }
+}
+
+/* Very small phones */
+@media (max-width: 360px) {
+  .pd-carousel-image {
+    height: 180px;
+  }
+  
+  .pd-header h1 {
+    font-size: 1.1rem;
+  }
+  
+  .pd-sub-info {
+    font-size: 0.9rem;
+  }
+  
+  .pd-like-btn, .pd-engagement-btn {
+    padding: 6px 10px;
+    font-size: 0.75rem;
+  }
+  
+  .pd-favorites-note, .pd-engagement-note {
+    font-size: 0.7rem;
+  }
+  
+  .pd-popup-content, .pd-report-dialog {
+    padding: 15px;
+  }
+}

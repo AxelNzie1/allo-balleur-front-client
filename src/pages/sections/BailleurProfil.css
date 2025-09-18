@@ -1,0 +1,480 @@
+/* BailleurProfil.css */
+.bailleur-profil {
+  padding: 10px;
+  max-width: 1920px;
+  margin: 0 auto;
+}
+
+.profil-container {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.token-card {
+  background: white;
+  padding: 25px;
+  border-radius: 15px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.pro-badge {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+  color: white;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-size: 0.8em;
+  font-weight: bold;
+}
+
+.token-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+  color: #2c3e50;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.token-balance {
+  font-size: 1.5em;
+  font-weight: bold;
+  color: #FF0086;
+}
+
+/* Packs de recharge */
+.recharge-packs {
+  margin: 25px 0;
+  padding: 20px;
+  background: #f8f9fa;
+  border-radius: 12px;
+  border: 1px solid #e9ecef;
+}
+
+.recharge-packs h4 {
+  margin-bottom: 15px;
+  color: #FF0086;
+  font-size: 1.2em;
+}
+
+.packs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 15px;
+  margin: 15px 0;
+}
+
+.pack-card {
+  border: 2px solid #e0e0e0;
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: white;
+  min-height: 120px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+.pack-card:hover {
+  border-color: #3498db;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 15px rgba(52, 152, 219, 0.2);
+}
+
+.pack-card.selected {
+  border-color: #3498db;
+  background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+  box-shadow: 0 6px 15px rgba(52, 152, 219, 0.3);
+}
+
+.pack-tokens {
+  font-size: 1.6em;
+  font-weight: bold;
+  color: #FF0086;
+  margin-bottom: 8px;
+}
+
+.pack-amount {
+  font-size: 1em;
+  color: #7f8c8d;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.pack-bonus {
+  font-size: 0.85em;
+  color: #27ae60;
+  font-weight: bold;
+  background: #e8f5e8;
+  padding: 4px 8px;
+  border-radius: 12px;
+  margin-top: 5px;
+}
+
+/* Recharge Mobile Money */
+.campay-group {
+  margin: 25px 0;
+  padding: 20px;
+  background: #F7F7F7;
+  border-radius: 12px;
+  border-left: 4px solid #0284c7;
+  border: 1px solid #e0f2fe;
+}
+
+.campay-group h4 {
+  color: #FF0086;
+  margin-bottom: 15px;
+  font-size: 1.2em;
+}
+
+.input-group {
+  margin-bottom: 15px;
+}
+
+.input-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 600;
+  color: #374151;
+  font-size: 0.9em;
+}
+
+.selected-pack-info {
+  background: #FFE9F5;
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  border-left: 4px solid #000;
+  font-size: 0.95em;
+}
+
+.recharge-input {
+  width: 100%;
+  padding: 14px;
+  margin: 5px 0;
+  border: 2px solid #ddd;
+  border-radius: 10px;
+  font-size: 16px;
+  transition: border-color 0.3s ease;
+  box-sizing: border-box;
+  max-width: 100%;
+}
+
+.recharge-input:focus {
+  border-color: #FF01;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+}
+
+.recharge-btn {
+  width: 100%;
+  padding: 15px;
+  background: linear-gradient(135deg, #0284c7, #FF0086);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 15px;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+}
+
+.recharge-btn:hover:not(:disabled) {
+  background: linear-gradient(135deg, #FF0086, #FF0086);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3);
+}
+
+.recharge-btn:disabled {
+  background: #bdc3c7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.recharge-btn.loading {
+  background: #FF0086;
+  cursor: not-allowed;
+}
+
+.custom-amount-info {
+  font-size: 0.9em;
+  color: #7f8c8d;
+  margin-top: 10px;
+  font-style: italic;
+  text-align: center;
+}
+
+/* Transactions */
+.transaction-section {
+  margin-top: 30px;
+}
+
+.transaction-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.transaction-header h3 {
+  color: #2c3e50;
+  margin: 0;
+}
+
+.pdf-btn {
+  background: #FF0086;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9em;
+  white-space: nowrap;
+}
+
+.pdf-btn:hover {
+  background: #c0392b;
+}
+
+.transaction-scroll {
+  max-height: 400px;
+  overflow-y: auto;
+  border: 1px solid #FFE9F5;
+  border-radius: 10px;
+  padding: 10px;
+  background: #fafafa;
+}
+
+.transaction-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.transaction-item {
+  display: flex;
+  align-items: center;
+  padding: 15px;
+  margin: 10px 0;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border-left: 4px solid #FFE9F5;
+}
+
+.transaction-item.debit {
+  border-left-color: #000;
+}
+
+.transaction-icon {
+  font-size: 1.5em;
+  margin-right: 15px;
+  flex-shrink: 0;
+}
+
+.transaction-details {
+  flex: 1;
+  min-width: 0;
+}
+
+.transaction-amount {
+  font-weight: bold;
+  color: #2c3e50;
+  margin-bottom: 5px;
+}
+
+.transaction-description {
+  color: #7f8c8d;
+  font-size: 0.9em;
+  margin-bottom: 5px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.transaction-date {
+  color: #95a5a6;
+  font-size: 0.8em;
+}
+
+.no-transactions {
+  text-align: center;
+  color: #7f8c8d;
+  font-style: italic;
+  padding: 30px;
+}
+
+/* Sections */
+.section-divider {
+  border: none;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #bdc3c7, transparent);
+  margin: 30px 0;
+}
+
+.profile-section, .kyc-section {
+  background: white;
+  padding: 25px;
+  border-radius: 15px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.profile-section h2, .kyc-section h2 {
+  color: #2c3e50;
+  margin-bottom: 20px;
+}
+
+.profile-input, .file-input {
+  width: 100%;
+  padding: 12px;
+  margin: 8px 0;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  font-size: 16px;
+  box-sizing: border-box;
+  max-width: 100%;
+}
+
+.update-btn, .kyc-upload-btn, .kyc-submit-btn {
+  background: #FFE9F5;
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-top: 15px;
+  transition: background 0.3s ease;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.update-btn:hover, .kyc-upload-btn:hover, .kyc-submit-btn:hover {
+  background: #FF0086;
+}
+
+/* KYC Section */
+.kyc-info {
+  color: #7f8c8d;
+  margin-bottom: 20px;
+  line-height: 1.5;
+}
+
+.kyc-docs {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.kyc-doc {
+  background: #f8f9fa;
+  padding: 15px;
+  border-radius: 10px;
+  box-sizing: border-box;
+}
+
+.kyc-doc label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+.kyc-status-container {
+  margin: 20px 0;
+  padding: 15px;
+  background: #ecf0f1;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.kyc-status {
+  font-weight: bold;
+  margin-left: 10px;
+}
+
+.kyc-status.verified { color: #27ae60; }
+.kyc-status.pending { color: #f39c12; }
+.kyc-status.approved { color: #3498db; }
+.kyc-status.rejected { color: #e74c3c; }
+.kyc-status.not-submitted { color: #7f8c8d; }
+.kyc-status.unknown { color: #95a5a6; }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .bailleur-profil {
+    padding: 10px;
+  }
+  
+  .packs-grid {
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  }
+  
+  .transaction-header {
+    flex-direction: column;
+    gap: 10px;
+    align-items: stretch;
+  }
+  
+  .kyc-docs {
+    grid-template-columns: 1fr;
+  }
+  
+  .token-header {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .packs-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  
+  .pack-card {
+    padding: 15px;
+  }
+  
+  .pack-tokens {
+    font-size: 1.4em;
+  }
+  
+  .transaction-scroll {
+    max-height: 300px;
+  }
+}
+
+/* Scrollbar styling */
+.transaction-scroll::-webkit-scrollbar {
+  width: 8px;
+}
+
+.transaction-scroll::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.transaction-scroll::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 4px;
+}
+
+.transaction-scroll::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}

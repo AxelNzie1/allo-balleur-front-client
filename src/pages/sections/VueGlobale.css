@@ -1,0 +1,120 @@
+/* Container principal */
+.vue-globale-container {
+  padding: 20px;
+  font-family: 'Inter', sans-serif;
+  background-color: #f9f9fb;
+  color: #333;
+}
+
+/* Titres principaux et secondaires */
+.vue-globale-container h2 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #222;
+  margin-bottom: 20px;
+}
+
+.vue-globale-container h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #444;
+  margin-bottom: 15px;
+}
+
+.vue-globale-container h4 {
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: #555;
+  margin-bottom: 10px;
+}
+
+/* Statistiques rapides */
+.stats-grid {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
+.stat-card {
+  flex: 1 1 200px;
+  padding: 20px;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+}
+
+.stat-card p {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #222;
+}
+
+/* Sections graphiques */
+.chart-section {
+  margin-top: 40px;
+  display: flex;
+  gap: 40px;
+  flex-wrap: wrap;
+  align-items: flex-start;
+}
+
+.chart-container {
+  flex: 1 1 300px;
+  height: 300px;
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+/* Tooltip personnalisé pour recharts */
+.recharts-tooltip-wrapper {
+  font-size: 0.9rem !important;
+  background: #ffffff !important;
+  border-radius: 8px !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1) !important;
+  padding: 8px !important;
+}
+
+/* Legend */
+.recharts-legend-item text {
+  font-size: 0.9rem;
+  fill: #333;
+}
+
+/* Détails texte sous les graphiques */
+.chart-details {
+  flex: 1 1 300px;
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: #444;
+}
+
+/* Messages d'erreur ou de chargement */
+.loading, .error, .no-data {
+  font-size: 1.1rem;
+  text-align: center;
+  margin-top: 40px;
+}
+
+.error {
+  color: #ff4d4f;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .stats-grid, .chart-section {
+    flex-direction: column;
+  }
+}

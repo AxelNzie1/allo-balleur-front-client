@@ -1,0 +1,13 @@
+.avatar {
+    border-radius: 9999px; /* équivalent à rounded-full */
+    object-fit: cover;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: inline-block;
+    background-color: #f3f4f6; /* gris clair par défaut si l'image met du temps à charger */
+  }
+  
+  .avatar:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+  

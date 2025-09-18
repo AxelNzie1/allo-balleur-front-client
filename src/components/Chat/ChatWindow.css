@@ -1,0 +1,208 @@
+:root {
+  --primary: #FF00B7;
+  --primary-dark: #9b00ff;       /* Violet complémentaire pour le dégradé */
+  --bg-light: #f9f9fb;
+  --text-dark: #2c2c2c;
+  --text-muted: #777;
+  --bubble-received: #e5e7eb;
+}
+
+/* ====== Conteneur principal ====== */
+.chatwin-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: var(--bg-light);
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+}
+
+/* ====== En-tête ====== */
+.chatwin-header {
+  display: flex;
+  align-items: center;
+  padding: 0.8rem 1rem;
+  background: white;
+  border-bottom: 1px solid #e5e7eb;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.chatwin-back-btn {
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  color: var(--primary);
+  margin-right: 0.8rem;
+  cursor: pointer;
+  transition: color 0.25s ease;
+}
+.chatwin-back-btn:hover {
+  color: #d9009f;
+}
+
+.chatwin-user-info h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  color: var(--text-dark);
+  font-weight: 600;
+}
+.chatwin-user-status {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+/* ====== Zone des messages ====== */
+.chatwin-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  background: var(--bg-light);
+}
+
+.chatwin-message {
+  display: flex;
+  max-width: 75%;
+}
+
+.chatwin-sent {
+  align-self: flex-end;
+  justify-content: flex-end;
+}
+
+.chatwin-received {
+  align-self: flex-start;
+  justify-content: flex-start;
+}
+
+.chatwin-message-content {
+  padding: 0.7rem 1rem;
+  border-radius: 20px;
+  background: var(--bubble-received);
+  color: var(--text-dark);
+  position: relative;
+  word-wrap: break-word;
+  font-size: 0.95rem;
+  transition: transform 0.2s ease;
+}
+.chatwin-message-content:hover {
+  transform: scale(1.02);
+}
+
+/* ✅ Dégradé pour les messages envoyés */
+.chatwin-sent .chatwin-message-content {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+  color: #fff;
+  border-bottom-right-radius: 4px;
+  box-shadow: 0 2px 8px rgba(255, 0, 183, 0.3);
+}
+
+.chatwin-received .chatwin-message-content {
+  border-bottom-left-radius: 4px;
+}
+
+.chatwin-message-time {
+  display: block;
+  margin-top: 0.3rem;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  text-align: right;
+}
+/* ✅ Heure en blanc uniquement pour les messages envoyés */
+.chatwin-sent .chatwin-message-time {
+  color: #ffffff;
+  opacity: 0.8; /* légère transparence pour ne pas trop contraster */
+}
+
+
+/* ====== Barre d’envoi ====== */
+.chatwin-input-container {
+  display: flex;
+  align-items: center;
+  padding: 0.6rem 0.8rem;
+  background: white;
+  border-top: 1px solid #e5e7eb;
+}
+
+.chatwin-input-field {
+  flex: 1;
+  resize: none;
+  border: 1px solid #e5e7eb;
+  border-radius: 20px;
+  padding: 0.6rem 1rem;
+  font-size: 0.95rem;
+  outline: none;
+  max-height: 150px;
+  line-height: 1.4;
+  transition: border 0.2s ease;
+}
+.chatwin-input-field:focus {
+  border-color: var(--primary);
+}
+
+.chatwin-send-btn {
+  background: var(--primary);
+  color: white;
+  border: none;
+  margin-left: 0.6rem;
+  padding: 0.55rem 0.9rem;
+  border-radius: 50%;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: background 0.25s ease;
+}
+.chatwin-send-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+.chatwin-send-btn:hover:not(:disabled) {
+  background: #d9009f;
+}
+
+/* ====== Scrollbar personnalisée ====== */
+.chatwin-messages::-webkit-scrollbar {
+  width: 6px;
+}
+.chatwin-messages::-webkit-scrollbar-thumb {
+  background: var(--primary);
+  border-radius: 3px;
+}
+.chatwin-messages::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* ====== Erreur ====== */
+.chatwin-error {
+  padding: 0.6rem 1rem;
+  background: #ffe6ec;
+  color: #d32f2f;
+  text-align: center;
+  font-size: 0.9rem;
+  border-top: 1px solid #f5c2c7;
+}
+
+/* ====== Responsive ====== */
+@media (max-width: 768px) {
+  .chatwin-user-info h3 {
+    font-size: 1rem;
+  }
+  .chatwin-message-content {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .chatwin-messages {
+    padding: 0.6rem;
+    gap: 0.5rem;
+  }
+  .chatwin-input-field {
+    font-size: 0.9rem;
+  }
+  .chatwin-send-btn {
+    font-size: 1.1rem;
+  }
+}

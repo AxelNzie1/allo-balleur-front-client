@@ -1,0 +1,130 @@
+.user-header {
+    background-color: #f9fafb;
+    padding: 0.4rem 0.5rem;
+    border-radius: 9999px;
+    transition: background-color 0.3s ease;
+    border: 1px solid #e5e7eb;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    max-width: 100%;
+    overflow: hidden;
+  }
+  
+  .user-header:hover {
+    background-color: #f3f4f6;
+  }
+  
+  .user-header span {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #374151;
+  }
+  
+  .user-menu-dropdown {
+    position: absolute;
+    top: 110%;
+    right: 0;
+    background-color: white;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
+    border-radius: 0.75rem;
+    width: 200px;
+    padding: 0.5rem 0;
+    z-index: 1000;
+    animation: fadeInDropdown 0.2s ease-in-out;
+  }
+  
+  .user-menu-dropdown .token-balance {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.5rem 1rem;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: #1f2937;
+    border-bottom: 1px solid #e5e7eb;
+    margin-bottom: 1rem;
+  }
+  
+  .token-icon {
+    font-size: 1rem;
+    color: #fc1557; /* Jaune/or pour icône pièce */
+  }
+  
+  .user-menu-dropdown button {
+    display: block;
+    width: 100%;
+    text-align: left;
+    padding: 0.6rem 1rem;
+    background: none;
+    border: none;
+    color: #374151;
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: background-color 0.2s, color 0.2s;
+    cursor: pointer;
+  }
+  
+  .user-menu-dropdown button:hover {
+    background-color: #f3f4f6;
+    color: #111827;
+  }
+  
+  .logout-btn {
+    border-top: 1px solid #e5e7eb;
+    margin-top: 0.5rem;
+    padding-top: 0.5rem;
+    color: #fc1557;
+  }
+  
+  .logout-btn:hover {
+    background-color: #fee2e2;
+    color: #b91c1c;
+  }
+  
+  /* Animation */
+  @keyframes fadeInDropdown {
+    from {
+      opacity: 0;
+      transform: translateY(-8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  /* Responsive */
+  @media (max-width: 640px) {
+    .user-header {
+      padding: 0.3rem 0.6rem;
+      gap: 0.3rem;
+    }
+  
+    .user-header span {
+      font-size: 0.85rem;
+      max-width: 70px;
+    }
+  
+    .user-menu-dropdown {
+      right: auto;
+      left: 0;
+      width: 100%;
+      border-radius: 10;
+      border-top: 1px solid #e5e7eb;
+      box-shadow: none;
+    }
+  
+    .user-menu-dropdown .token-balance {
+      font-size: 0.6rem;
+    }
+  
+    .user-menu-dropdown button {
+      font-size: 0.7rem;
+    }
+  }
+  

@@ -1,0 +1,186 @@
+.mesbiens-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.mesbiens-title {
+  text-align: center;
+  margin-bottom: 30px;
+  color: #333;
+}
+
+.loading, .no-properties {
+  text-align: center;
+  padding: 40px;
+  font-size: 1.2rem;
+  color: #666;
+}
+
+.biens-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.bien-card {
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 15px;
+  background: white;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  position: relative;
+  transition: all 0.3s ease-in-out;
+}
+
+/* 🎖 Promu : visuel atténué et bordure violette */
+.bien-card.promoted {
+  border: 2px solid #7c4dff;
+  background-color: #f9f7ff;
+  opacity: 0.95;
+}
+
+/* 🎖 Badge "★ Promu" */
+.featured-badge {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  background-color: #7c4dff;
+  color: white;
+  padding: 5px 10px;
+  font-size: 0.75rem;
+  border-radius: 50px;
+  font-weight: bold;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.bien-header {
+  margin-bottom: 15px;
+}
+
+.bien-header h3 {
+  margin: 0 0 10px 0;
+  font-size: 1.2rem;
+}
+
+.bien-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.bien-statut {
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+}
+
+.bien-statut.disponible {
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
+.bien-statut.indisponible {
+  background: #ffebee;
+  color: #c62828;
+}
+
+.bien-ratings {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.star {
+  color: #ccc;
+}
+
+.star.filled {
+  color: #ffc107;
+}
+
+.bien-likes {
+  font-size: 0.9rem;
+}
+
+.bien-details {
+  margin: 15px 0;
+}
+
+.bien-details p {
+  margin: 5px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.bien-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.bien-actions button {
+  padding: 8px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+}
+
+/* 🟪 Bouton Promouvoir */
+.btn-promote {
+  background: #7c4dff;
+  color: white;
+}
+
+/* 🔒 Bouton désactivé */
+.btn-promote:disabled {
+  background: #cbb9ff;
+  color: white;
+  cursor: not-allowed;
+}
+
+/* 🖊️ Bouton Modifier */
+.btn-edit {
+  background: #2196f3;
+  color: white;
+}
+
+.status-btn {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+}
+
+.status-btn.available {
+  background-color: #4CAF50; /* Vert pour "Rendre disponible" */
+  color: white;
+}
+
+.status-btn.occupied {
+  background-color: #f44336; /* Rouge pour "Marquer occupé" */
+  color: white;
+}
+
+.status-btn:hover {
+  opacity: 0.9;
+}
+
+.btn-delete {
+  background: #f44336;
+  color: white;
+}
+
+@media (max-width: 768px) {
+  .biens-grid {
+    grid-template-columns: 1fr;
+  }
+}

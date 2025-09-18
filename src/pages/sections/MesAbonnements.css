@@ -1,0 +1,236 @@
+/* Styles pour les descriptions d'abonnements */
+.subscription-description {
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 15px;
+  color: white;
+}
+
+.subscription-description h3 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+}
+
+.description-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+/* Pour les écrans larges, on peut mettre côte à côte si on veut */
+@media (min-width: 1200px) {
+  .description-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.description-card {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border-radius: 12px;
+  padding: 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.description-header {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.description-header h4 {
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+.badge {
+  background: rgba(255, 255, 255, 0.2);
+  padding: 0.3rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  margin-top: 0.5rem;
+  display: inline-block;
+}
+
+.description-content p {
+  text-align: center;
+  margin-bottom: 1rem;
+  opacity: 0.9;
+}
+
+.feature-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.feature-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.8rem;
+}
+
+.feature-icon {
+  font-size: 1.2rem;
+  min-width: 30px;
+}
+
+.feature-text strong {
+  display: block;
+  margin-bottom: 0.2rem;
+  color: #fff;
+}
+
+.feature-text p {
+  margin: 0;
+  font-size: 0.9rem;
+  opacity: 0.8;
+  text-align: left;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* Amélioration des cartes d'abonnement */
+.subscription-card {
+  background: white;
+  border-radius: 15px;
+  padding: 2rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
+  border: 2px solid #e0e0e0;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.subscription-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+}
+
+.subscription-card.vip {
+  border-color: #ffd700;
+  background: linear-gradient(135deg, #fffaf0 0%, #fff5e6 100%);
+}
+
+.subscription-card h3 {
+  color: #333;
+  margin-bottom: 1rem;
+  font-size: 1.4rem;
+  text-align: center;
+}
+
+.benefits ul {
+  list-style: none;
+  padding: 0;
+}
+
+.benefits li {
+  padding: 0.5rem 0;
+  display: flex;
+  align-items: center;
+  font-size: 0.95rem;
+}
+
+.benefits li:before {
+  content: "✅";
+  margin-right: 0.8rem;
+  font-size: 1.1rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .subscription-description {
+    padding: 1rem;
+  }
+  
+  .description-card {
+    padding: 1rem;
+  }
+  
+  .subscription-card {
+    padding: 1.5rem;
+  }
+}
+
+/* Styles pour les statuts */
+.active {
+  color: #10b981;
+  font-weight: bold;
+}
+
+.inactive {
+  color: #ef4444;
+  font-weight: bold;
+}
+
+.price {
+  background: #f8f9fa;
+  padding: 1rem;
+  border-radius: 8px;
+  margin: 1rem 0;
+}
+
+.price p {
+  margin: 0.5rem 0;
+  font-weight: 500;
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  padding: 1rem 2rem;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  font-size: 1rem;
+}
+
+.primary:hover:not(:disabled) {
+  transform: scale(1.05);
+}
+
+.secondary {
+  background: #e5e7eb;
+  color: #374151;
+  border: none;
+  padding: 1rem 2rem;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.secondary:hover {
+  background: #d1d5db;
+}
+
+.disabled {
+  background: #9ca3af;
+  color: white;
+  border: none;
+  padding: 1rem 2rem;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: not-allowed;
+}
+
+.active-btn {
+  background: #10b981;
+  color: white;
+  border: none;
+  padding: 1rem 2rem;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: not-allowed;
+  text-align: center;
+}
+
+
