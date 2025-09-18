@@ -2,9 +2,8 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, signInWithCustomToken, RecaptchaVerifier } from "firebase/auth";
 
-// Configuration Firebase Web SDK (depuis ta console)
 const firebaseConfig = {
-  apiKey: "AIzaSyAFGwOpn50NbvbM5lWJx9odM79Sj_rRXU",
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
   authDomain: "allo-bailleur.firebaseapp.com",
   projectId: "allo-bailleur",
   storageBucket: "allo-bailleur.firebasestorage.app",
