@@ -23,6 +23,8 @@ function App() {
 
         </Routes>
       </div>
+      <div id="recaptcha-container"></div>
+
     </>
   );
 }

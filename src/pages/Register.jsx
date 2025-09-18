@@ -1,9 +1,10 @@
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { auth } from "../firebaseClient"; // ton instance Firebase
-import { signInWithCustomToken, RecaptchaVerifier } from "firebase/auth";
+import { auth } from "../firebaseClient";
+import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
 import "./Register.css";
+import AuthOtp from "../components/AuthOtp/AuthOtp";
 
 export default function Register() {
   const navigate = useNavigate();
@@ -19,25 +20,25 @@ export default function Register() {
   const [error, setError] = useState("");
   const [confirmationResult, setConfirmationResult] = useState(null);
   const [showBonusPopup, setShowBonusPopup] = useState(false);
-  const [verificationMethod, setVerificationMethod] = useState(""); // "email" ou "sms"
+  const [verificationMethod, setVerificationMethod] = useState(""); // "email" | "sms"
   const [emailLink, setEmailLink] = useState("");
 
   const handleChange = (e) =>
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+
   const handleFileChange = (e) => setProfileImage(e.target.files[0]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
-  
+
     try {
-      // Formater le téléphone en E.164 si nécessaire
+      // Normalisation du numéro de téléphone au format E.164
       let phoneNumber = formData.phone;
       if (!phoneNumber.startsWith("+")) {
-        // Exemple : pour le Cameroun
         phoneNumber = "+237" + phoneNumber.replace(/\D/g, "");
       }
-  
+
       const data = new FormData();
       data.append("email", formData.email);
       data.append("full_name", formData.full_name);
@@ -45,39 +46,37 @@ export default function Register() {
       data.append("password", formData.password);
       data.append("role", formData.role);
       if (profileImage) data.append("profile_image", profileImage);
-  
-      // Demander la méthode de vérification avant l'appel API
+
+      // Choix de la méthode de vérification
       const method = window.confirm(
-        "Voulez-vous recevoir l'OTP par SMS ? Cliquer sur 'Annuler' pour recevoir par email"
+        "Voulez-vous recevoir l'OTP par SMS ? (OK = SMS / Annuler = Email)"
       )
         ? "sms"
         : "email";
       setVerificationMethod(method);
       data.append("method", method);
-  
+
       const response = await axios.post(
         "https://allo-bailleur-backend-1.onrender.com/auth/start-registration",
         data,
         { headers: { "Content-Type": "multipart/form-data" } }
       );
-  
+
       if (method === "sms") {
-        // Initialiser Recaptcha invisible
+        // Recaptcha invisible
         window.recaptchaVerifier = new RecaptchaVerifier(
           "recaptcha-container",
           { size: "invisible" },
           auth
         );
-  
-        const confirmationResult = await signInWithPhoneNumber(
+
+        // Envoi du SMS
+        const confirmation = await signInWithPhoneNumber(
           auth,
           phoneNumber,
           window.recaptchaVerifier
         );
-  
-        setConfirmationResult(confirmationResult);
-        setShowOtpInput(true);
-  
+        setConfirmationResult(confirmation);
       } else if (method === "email") {
         setEmailLink(response.data.email_verification_link);
         alert(
@@ -89,7 +88,7 @@ export default function Register() {
       setError(err.response?.data?.detail || "Erreur lors de l'inscription");
     }
   };
-  
+
   const handleClosePopup = () => {
     setShowBonusPopup(false);
     navigate("/");
@@ -101,31 +100,69 @@ export default function Register() {
         <h2>Inscription</h2>
         {error && <p style={{ color: "red" }}>{error}</p>}
 
+        {/* Formulaire d'inscription */}
         {!showBonusPopup && !emailLink && (
           <form onSubmit={handleSubmit} encType="multipart/form-data">
             <label>Email:</label>
-            <input type="email" name="email" value={formData.email} onChange={handleChange} required />
+            <input
+              type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              required
+            />
+
             <label>Nom complet:</label>
-            <input type="text" name="full_name" value={formData.full_name} onChange={handleChange} required />
+            <input
+              type="text"
+              name="full_name"
+              value={formData.full_name}
+              onChange={handleChange}
+              required
+            />
+
             <label>Téléphone:</label>
-            <input type="text" name="phone" value={formData.phone} onChange={handleChange} required />
+            <input
+              type="text"
+              name="phone"
+              value={formData.phone}
+              onChange={handleChange}
+              required
+            />
+
             <label>Mot de passe:</label>
-            <input type="password" name="password" value={formData.password} onChange={handleChange} required />
+            <input
+              type="password"
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+              required
+            />
+
             <label>Rôle:</label>
-            <select name="role" value={formData.role} onChange={handleChange} required>
+            <select
+              name="role"
+              value={formData.role}
+              onChange={handleChange}
+              required
+            >
               <option value="client">Client</option>
               <option value="bailleur">Bailleur</option>
             </select>
+
             <label>Image de profil (optionnel):</label>
             <input type="file" accept="image/*" onChange={handleFileChange} />
+
             <button type="submit">S’inscrire</button>
           </form>
         )}
 
+        {/* Lien de vérification email */}
         {emailLink && (
           <div>
             <p>
-              Un lien de vérification a été envoyé à votre email. Vérifiez votre boîte de réception pour activer le compte.
+              Un lien de vérification a été envoyé à votre email. Vérifiez votre
+              boîte de réception.
             </p>
             <a href={emailLink} target="_blank" rel="noopener noreferrer">
               Cliquer pour vérifier l'email
@@ -133,17 +170,26 @@ export default function Register() {
           </div>
         )}
 
+        {/* Composant OTP : affiché seulement si la vérification SMS est choisie */}
+        {verificationMethod === "sms" && confirmationResult && (
+          <div style={{ marginTop: "1rem" }}>
+            <AuthOtp />
+          </div>
+        )}
+
+        {/* Recaptcha container requis par Firebase */}
         <div id="recaptcha-container"></div>
       </div>
 
+      {/* Popup bonus après création de compte */}
       {showBonusPopup && (
         <div className="bonus-popup-overlay">
           <div className="bonus-popup">
             <h3>🎉 Bienvenue !</h3>
             <p>
-              Félicitations <strong>{formData.full_name || "cher utilisateur"}</strong> !
-              <br />
-              Votre compte a été créé avec succès et vous venez de recevoir <strong>150 tokens gratuits</strong>.
+              Félicitations <strong>{formData.full_name || "cher utilisateur"}</strong> !<br />
+              Votre compte a été créé avec succès et vous venez de recevoir{" "}
+              <strong>150 tokens gratuits</strong>.
             </p>
             <button onClick={handleClosePopup}>Super, merci !</button>
           </div>
