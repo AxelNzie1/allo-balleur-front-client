@@ -3,12 +3,11 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { auth } from "../firebaseClient";
 import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
-import "./Register.css";
 import AuthOtp from "../components/AuthOtp/AuthOtp";
+import "./Register.css";
 
 export default function Register() {
   const navigate = useNavigate();
-
   const [formData, setFormData] = useState({
     email: "",
     full_name: "",
@@ -19,7 +18,6 @@ export default function Register() {
   const [profileImage, setProfileImage] = useState(null);
   const [error, setError] = useState("");
   const [confirmationResult, setConfirmationResult] = useState(null);
-  const [verificationMethod, setVerificationMethod] = useState(""); // "email" | "sms"
   const [emailLink, setEmailLink] = useState("");
 
   const handleChange = (e) =>
@@ -32,7 +30,6 @@ export default function Register() {
     setError("");
 
     try {
-      // Normaliser numéro au format E.164
       let phoneNumber = formData.phone.replace(/\D/g, "");
       if (!phoneNumber.startsWith("+")) phoneNumber = "+237" + phoneNumber;
 
@@ -45,31 +42,27 @@ export default function Register() {
       if (profileImage) data.append("profile_image", profileImage);
 
       // Choix méthode
-      const method = window.confirm(
-        "Recevoir OTP par SMS ? (OK = SMS / Annuler = Email)"
-      )
+      const method = window.confirm("Recevoir OTP par SMS ? (OK = SMS / Annuler = Email)")
         ? "sms"
         : "email";
-      setVerificationMethod(method);
       data.append("method", method);
 
-      // Appel backend
       const response = await axios.post(
         "https://allo-bailleur-backend-1.onrender.com/auth/start-registration",
         data
       );
 
       if (method === "sms") {
-        // Recaptcha invisible obligatoire
+        // Initialise Recaptcha correctement
         if (!window.recaptchaVerifier) {
           window.recaptchaVerifier = new RecaptchaVerifier(
             "recaptcha-container",
             { size: "invisible" },
             auth
           );
+          await window.recaptchaVerifier.render();
         }
 
-        // Envoi SMS réel via Firebase
         const confirmation = await signInWithPhoneNumber(
           auth,
           phoneNumber,
@@ -78,9 +71,7 @@ export default function Register() {
         setConfirmationResult(confirmation);
       } else if (method === "email") {
         setEmailLink(response.data.email_verification_link);
-        alert(
-          "Lien de vérification envoyé à votre email. Cliquez dessus pour valider votre compte."
-        );
+        alert("Lien de vérification envoyé à votre email. Cliquez dessus pour valider votre compte.");
       }
     } catch (err) {
       console.error(err);
@@ -97,48 +88,19 @@ export default function Register() {
         {!emailLink && !confirmationResult && (
           <form onSubmit={handleSubmit} encType="multipart/form-data">
             <label>Email:</label>
-            <input
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              required
-            />
+            <input type="email" name="email" value={formData.email} onChange={handleChange} required />
 
             <label>Nom complet:</label>
-            <input
-              type="text"
-              name="full_name"
-              value={formData.full_name}
-              onChange={handleChange}
-              required
-            />
+            <input type="text" name="full_name" value={formData.full_name} onChange={handleChange} required />
 
             <label>Téléphone:</label>
-            <input
-              type="text"
-              name="phone"
-              value={formData.phone}
-              onChange={handleChange}
-              required
-            />
+            <input type="text" name="phone" value={formData.phone} onChange={handleChange} required />
 
             <label>Mot de passe:</label>
-            <input
-              type="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              required
-            />
+            <input type="password" name="password" value={formData.password} onChange={handleChange} required />
 
             <label>Rôle:</label>
-            <select
-              name="role"
-              value={formData.role}
-              onChange={handleChange}
-              required
-            >
+            <select name="role" value={formData.role} onChange={handleChange} required>
               <option value="client">Client</option>
               <option value="bailleur">Bailleur</option>
             </select>
@@ -152,19 +114,13 @@ export default function Register() {
 
         {emailLink && (
           <div>
-            <p>
-              Vérifiez votre boîte email et cliquez sur le lien pour confirmer votre compte.
-            </p>
-            <a href={emailLink} target="_blank" rel="noopener noreferrer">
-              Vérifier l'email
-            </a>
+            <p>Vérifiez votre boîte email et cliquez sur le lien pour confirmer votre compte.</p>
+            <a href={emailLink} target="_blank" rel="noopener noreferrer">Vérifier l'email</a>
           </div>
         )}
 
         {confirmationResult && (
-          <div style={{ marginTop: "1rem" }}>
-            <AuthOtp confirmationResult={confirmationResult} />
-          </div>
+          <AuthOtp confirmationResult={confirmationResult} onVerified={(user) => navigate("/")} />
         )}
 
         <div id="recaptcha-container"></div>

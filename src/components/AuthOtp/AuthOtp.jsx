@@ -7,7 +7,6 @@ export default function AuthOtp({ confirmationResult, onVerified }) {
   const handleVerify = async () => {
     try {
       const result = await confirmationResult.confirm(code);
-      alert("Numéro vérifié avec succès !");
       onVerified(result.user); // callback pour naviguer ou mettre à jour l'état
     } catch (err) {
       console.error(err);
