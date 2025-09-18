@@ -29,18 +29,24 @@ export default function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
-
+  
     try {
-      // FormData pour envoi multipart
+      // Formater le téléphone en E.164 si nécessaire
+      let phoneNumber = formData.phone;
+      if (!phoneNumber.startsWith("+")) {
+        // Exemple : pour le Cameroun
+        phoneNumber = "+237" + phoneNumber.replace(/\D/g, "");
+      }
+  
       const data = new FormData();
       data.append("email", formData.email);
       data.append("full_name", formData.full_name);
-      data.append("phone", formData.phone);
+      data.append("phone", phoneNumber);
       data.append("password", formData.password);
       data.append("role", formData.role);
       if (profileImage) data.append("profile_image", profileImage);
-
-      // Choix de la méthode SMS ou Email
+  
+      // Demander la méthode de vérification avant l'appel API
       const method = window.confirm(
         "Voulez-vous recevoir l'OTP par SMS ? Cliquer sur 'Annuler' pour recevoir par email"
       )
@@ -48,24 +54,31 @@ export default function Register() {
         : "email";
       setVerificationMethod(method);
       data.append("method", method);
-
-      // Envoi au backend
+  
       const response = await axios.post(
         "https://allo-bailleur-backend-1.onrender.com/auth/start-registration",
         data,
         { headers: { "Content-Type": "multipart/form-data" } }
       );
-
+  
       if (method === "sms") {
-        const token = response.data.sms_custom_token;
-
-        // Connecte l'utilisateur avec le token custom Firebase
-        const userCredential = await signInWithCustomToken(auth, token);
-        console.log("Utilisateur connecté avec custom token:", userCredential.user);
-
-        // Afficher le popup bonus directement si la vérification côté backend est OK
-        setShowBonusPopup(true);
-      } else {
+        // Initialiser Recaptcha invisible
+        window.recaptchaVerifier = new RecaptchaVerifier(
+          "recaptcha-container",
+          { size: "invisible" },
+          auth
+        );
+  
+        const confirmationResult = await signInWithPhoneNumber(
+          auth,
+          phoneNumber,
+          window.recaptchaVerifier
+        );
+  
+        setConfirmationResult(confirmationResult);
+        setShowOtpInput(true);
+  
+      } else if (method === "email") {
         setEmailLink(response.data.email_verification_link);
         alert(
           "Un lien de vérification a été envoyé à votre email. Cliquez dessus pour valider votre compte."
@@ -76,7 +89,7 @@ export default function Register() {
       setError(err.response?.data?.detail || "Erreur lors de l'inscription");
     }
   };
-
+  
   const handleClosePopup = () => {
     setShowBonusPopup(false);
     navigate("/");
