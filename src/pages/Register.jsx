@@ -19,9 +19,9 @@ export default function Register() {
   const [profileImage, setProfileImage] = useState(null);
   const [error, setError] = useState("");
   const [confirmationResult, setConfirmationResult] = useState(null);
-  const [showBonusPopup, setShowBonusPopup] = useState(false);
-  const [verificationMethod, setVerificationMethod] = useState(""); // "email" | "sms"
+  const [verificationMethod, setVerificationMethod] = useState(""); // sms | email
   const [emailLink, setEmailLink] = useState("");
+  const [showBonusPopup, setShowBonusPopup] = useState(false);
 
   const handleChange = (e) =>
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -33,12 +33,13 @@ export default function Register() {
     setError("");
 
     try {
-      // Normalisation du numéro de téléphone au format E.164
+      // Normalisation du numéro au format E.164
       let phoneNumber = formData.phone;
       if (!phoneNumber.startsWith("+")) {
         phoneNumber = "+237" + phoneNumber.replace(/\D/g, "");
       }
 
+      // Préparer FormData pour le backend
       const data = new FormData();
       data.append("email", formData.email);
       data.append("full_name", formData.full_name);
@@ -56,6 +57,7 @@ export default function Register() {
       setVerificationMethod(method);
       data.append("method", method);
 
+      // Appel backend pour créer l'utilisateur
       const response = await axios.post(
         "https://allo-bailleur-backend-1.onrender.com/auth/start-registration",
         data,
@@ -63,20 +65,23 @@ export default function Register() {
       );
 
       if (method === "sms") {
-        // Recaptcha invisible
-        window.recaptchaVerifier = new RecaptchaVerifier(
-          "recaptcha-container",
-          { size: "invisible" },
-          auth
-        );
+        // 1️⃣ Crée le Recaptcha invisible si pas déjà créé
+        if (!window.recaptchaVerifier) {
+          window.recaptchaVerifier = new RecaptchaVerifier(
+            "recaptcha-container",
+            { size: "invisible" },
+            auth
+          );
+        }
 
-        // Envoi du SMS
+        // 2️⃣ Envoi du SMS via Firebase Auth
         const confirmation = await signInWithPhoneNumber(
           auth,
           phoneNumber,
           window.recaptchaVerifier
         );
         setConfirmationResult(confirmation);
+        alert("OTP envoyé par SMS ! Vérifiez votre téléphone.");
       } else if (method === "email") {
         setEmailLink(response.data.email_verification_link);
         alert(
@@ -85,8 +90,14 @@ export default function Register() {
       }
     } catch (err) {
       console.error(err);
-      setError(err.response?.data?.detail || "Erreur lors de l'inscription");
+      setError(err.response?.data?.detail || err.message || "Erreur lors de l'inscription");
     }
+  };
+
+  const handleOtpVerified = (user) => {
+    // Appelé après validation OTP
+    alert(`Bienvenue ${user.phoneNumber || formData.full_name} !`);
+    setShowBonusPopup(true);
   };
 
   const handleClosePopup = () => {
@@ -101,7 +112,7 @@ export default function Register() {
         {error && <p style={{ color: "red" }}>{error}</p>}
 
         {/* Formulaire d'inscription */}
-        {!showBonusPopup && !emailLink && (
+        {!showBonusPopup && !emailLink && !confirmationResult && (
           <form onSubmit={handleSubmit} encType="multipart/form-data">
             <label>Email:</label>
             <input
@@ -170,11 +181,12 @@ export default function Register() {
           </div>
         )}
 
-        {/* Composant OTP : affiché seulement si la vérification SMS est choisie */}
+        {/* OTP pour SMS */}
         {verificationMethod === "sms" && confirmationResult && (
-          <div style={{ marginTop: "1rem" }}>
-            <AuthOtp />
-          </div>
+          <AuthOtp
+            confirmationResult={confirmationResult}
+            onVerified={handleOtpVerified}
+          />
         )}
 
         {/* Recaptcha container requis par Firebase */}

@@ -1,43 +1,30 @@
 import { useState } from "react";
-import { sendSmsCode, verifySmsCode } from "../../utils/sendSmsCode";
 
-export default function AuthOtp() {
-  const [phone, setPhone] = useState("");
+export default function AuthOtp({ confirmationResult, onVerified }) {
   const [code, setCode] = useState("");
-  const [step, setStep] = useState("phone");
-
-  const handleSend = async () => {
-    await sendSmsCode(phone);
-    setStep("code");
-  };
+  const [error, setError] = useState("");
 
   const handleVerify = async () => {
-    const result = await verifySmsCode(code);
-    console.log("User Firebase:", result.user);
+    try {
+      const result = await confirmationResult.confirm(code);
+      alert("Numéro vérifié avec succès !");
+      onVerified(result.user); // callback pour naviguer ou mettre à jour l'état
+    } catch (err) {
+      console.error(err);
+      setError("Code incorrect ou expiré");
+    }
   };
 
   return (
     <div>
-      {step === "phone" && (
-        <>
-          <input
-            value={phone}
-            onChange={(e) => setPhone(e.target.value)}
-            placeholder="+237..."
-          />
-          <button onClick={handleSend}>Envoyer SMS</button>
-        </>
-      )}
-      {step === "code" && (
-        <>
-          <input
-            value={code}
-            onChange={(e) => setCode(e.target.value)}
-            placeholder="Code OTP"
-          />
-          <button onClick={handleVerify}>Vérifier</button>
-        </>
-      )}
+      <input
+        type="text"
+        value={code}
+        onChange={(e) => setCode(e.target.value)}
+        placeholder="Entrez le code OTP"
+      />
+      <button onClick={handleVerify}>Vérifier</button>
+      {error && <p style={{ color: "red" }}>{error}</p>}
     </div>
   );
 }
