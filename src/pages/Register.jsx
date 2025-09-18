@@ -2,7 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { signInWithPhoneNumber, RecaptchaVerifier } from "firebase/auth";
-import { auth } from "../firebaseClient"; // importez l'instance unique
+import { auth } from "../firebaseClient";
 import "./Register.css";
 
 export default function Register() {
@@ -33,20 +33,7 @@ export default function Register() {
     setError("");
 
     try {
-      const data = new FormData();
-      data.append("email", formData.email);
-      data.append("full_name", formData.full_name);
-      data.append("phone", formData.phone);
-      data.append("password", formData.password);
-      data.append("role", formData.role);
-      if (profileImage) data.append("profile_image", profileImage);
-
-      const response = await axios.post(
-        "https://allo-bailleur-backend-1.onrender.com/auth/start-registration",
-        data,
-        { headers: { "Content-Type": "multipart/form-data" } }
-      );
-
+      // Choix de la méthode avant l'envoi
       const method = window.confirm(
         "Voulez-vous recevoir l'OTP par SMS ? Cliquer sur 'Annuler' pour recevoir par email"
       )
@@ -54,7 +41,25 @@ export default function Register() {
         : "email";
       setVerificationMethod(method);
 
+      // Préparer FormData
+      const data = new FormData();
+      data.append("email", formData.email);
+      data.append("full_name", formData.full_name);
+      data.append("phone", formData.phone);
+      data.append("password", formData.password);
+      data.append("role", formData.role);
+      data.append("method", method); // <- IMPORTANT
+      if (profileImage) data.append("profile_image", profileImage);
+
+      // Envoyer au backend
+      const response = await axios.post(
+        "https://allo-bailleur-backend-1.onrender.com/auth/start-registration",
+        data,
+        { headers: { "Content-Type": "multipart/form-data" } }
+      );
+
       if (method === "sms") {
+        // OTP SMS
         window.recaptchaVerifier = new RecaptchaVerifier(
           "recaptcha-container",
           { size: "invisible" },
@@ -69,6 +74,7 @@ export default function Register() {
         setConfirmationResult(result);
         setShowOtpInput(true);
       } else {
+        // OTP Email
         setEmailLink(response.data.email_verification_link);
         alert(
           "Un lien de vérification a été envoyé à votre email. Cliquez dessus pour valider votre compte."
@@ -112,6 +118,7 @@ export default function Register() {
               onChange={handleChange}
               required
             />
+
             <label>Nom complet:</label>
             <input
               type="text"
@@ -120,14 +127,17 @@ export default function Register() {
               onChange={handleChange}
               required
             />
+
             <label>Téléphone:</label>
             <input
               type="text"
               name="phone"
               value={formData.phone}
               onChange={handleChange}
+              placeholder="+33612345678"
               required
             />
+
             <label>Mot de passe:</label>
             <input
               type="password"
@@ -136,6 +146,7 @@ export default function Register() {
               onChange={handleChange}
               required
             />
+
             <label>Rôle:</label>
             <select
               name="role"
@@ -146,8 +157,10 @@ export default function Register() {
               <option value="client">Client</option>
               <option value="bailleur">Bailleur</option>
             </select>
+
             <label>Image de profil (optionnel):</label>
             <input type="file" accept="image/*" onChange={handleFileChange} />
+
             <button type="submit">S’inscrire</button>
           </form>
         ) : verificationMethod === "sms" ? (
