@@ -1,10 +1,11 @@
+// src/pages/Register.jsx
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { auth, setupRecaptcha } from "../firebaseClient";
+import { auth } from "../firebaseClient";
+import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
 import AuthOtp from "../components/AuthOtp/AuthOtp";
 import "./Register.css";
-import { signInWithPhoneNumber } from "firebase/auth";
 
 export default function Register() {
   const navigate = useNavigate();
@@ -19,19 +20,34 @@ export default function Register() {
   const [profileImage, setProfileImage] = useState(null);
   const [error, setError] = useState("");
   const [confirmationResult, setConfirmationResult] = useState(null);
-  const [verificationMethod, setVerificationMethod] = useState(""); // "email" | "sms"
+  const [emailLink, setEmailLink] = useState("");
 
+  // ---------------------------
+  // Handlers
+  // ---------------------------
   const handleChange = (e) =>
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
 
   const handleFileChange = (e) => setProfileImage(e.target.files[0]);
+
+  // Initialise un reCAPTCHA invisible
+  const setupRecaptcha = () => {
+    if (!window.recaptchaVerifier) {
+      window.recaptchaVerifier = new RecaptchaVerifier(
+        "recaptcha-container",
+        { size: "invisible" },
+        auth
+      );
+      window.recaptchaVerifier.render();
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
 
     try {
-      // Normalisation numéro au format E.164
+      // Normalise le numéro au format E.164 (+237 pour le Cameroun)
       let phoneNumber = formData.phone.replace(/\D/g, "");
       if (!phoneNumber.startsWith("+")) phoneNumber = "+237" + phoneNumber;
 
@@ -43,13 +59,12 @@ export default function Register() {
       data.append("role", formData.role);
       if (profileImage) data.append("profile_image", profileImage);
 
-      // Choix méthode
+      // Choix méthode OTP : OK = SMS, Annuler = Email
       const method = window.confirm(
         "Recevoir OTP par SMS ? (OK = SMS / Annuler = Email)"
       )
         ? "sms"
         : "email";
-      setVerificationMethod(method);
       data.append("method", method);
 
       const response = await axios.post(
@@ -58,6 +73,7 @@ export default function Register() {
       );
 
       if (method === "sms") {
+        // ✅ SMS: on déclenche le reCAPTCHA invisible puis envoi du code
         setupRecaptcha();
         const confirmation = await signInWithPhoneNumber(
           auth,
@@ -65,7 +81,9 @@ export default function Register() {
           window.recaptchaVerifier
         );
         setConfirmationResult(confirmation);
-      } else if (method === "email") {
+      } else {
+        // ✅ Email: lien de vérification
+        setEmailLink(response.data.email_verification_link);
         alert(
           "Lien de vérification envoyé à votre email. Cliquez dessus pour valider votre compte."
         );
@@ -74,21 +92,24 @@ export default function Register() {
       console.error(err);
       setError(
         err.response?.data?.detail ||
-        err.message ||
-        "Erreur lors de l'inscription"
+          err.message ||
+          "Erreur lors de l'inscription"
       );
     }
   };
 
+  // ---------------------------
+  // JSX
+  // ---------------------------
   return (
     <div className="register-page">
       <div className="register-container">
         <h2>Inscription</h2>
         {error && <p style={{ color: "red" }}>{error}</p>}
 
-        {!confirmationResult && (
+        {!emailLink && !confirmationResult && (
           <form onSubmit={handleSubmit} encType="multipart/form-data">
-            <label>Email:</label>
+            <label>Email :</label>
             <input
               type="email"
               name="email"
@@ -97,7 +118,7 @@ export default function Register() {
               required
             />
 
-            <label>Nom complet:</label>
+            <label>Nom complet :</label>
             <input
               type="text"
               name="full_name"
@@ -106,7 +127,7 @@ export default function Register() {
               required
             />
 
-            <label>Téléphone:</label>
+            <label>Téléphone :</label>
             <input
               type="text"
               name="phone"
@@ -115,7 +136,7 @@ export default function Register() {
               required
             />
 
-            <label>Mot de passe:</label>
+            <label>Mot de passe :</label>
             <input
               type="password"
               name="password"
@@ -124,7 +145,7 @@ export default function Register() {
               required
             />
 
-            <label>Rôle:</label>
+            <label>Rôle :</label>
             <select
               name="role"
               value={formData.role}
@@ -135,21 +156,35 @@ export default function Register() {
               <option value="bailleur">Bailleur</option>
             </select>
 
-            <label>Image de profil (optionnel):</label>
+            <label>Image de profil (optionnel) :</label>
             <input type="file" accept="image/*" onChange={handleFileChange} />
 
             <button type="submit">S’inscrire</button>
           </form>
         )}
 
-        {confirmationResult && (
-          <AuthOtp
-            confirmationResult={confirmationResult}
-            email={formData.email}
-            onVerified={() => navigate("/")}
-          />
+        {emailLink && (
+          <div>
+            <p>
+              Vérifiez votre boîte email et cliquez sur le lien pour confirmer
+              votre compte.
+            </p>
+            <a href={emailLink} target="_blank" rel="noopener noreferrer">
+              Vérifier l'email
+            </a>
+          </div>
         )}
 
+        {confirmationResult && (
+          <div style={{ marginTop: "1rem" }}>
+            <AuthOtp
+              confirmationResult={confirmationResult}
+              onVerified={() => navigate("/")}
+            />
+          </div>
+        )}
+
+        {/* Conteneur obligatoire pour le reCAPTCHA */}
         <div id="recaptcha-container"></div>
       </div>
     </div>
