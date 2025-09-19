@@ -1,16 +1,27 @@
 import { useState } from "react";
+import axios from "axios";
 
-export default function AuthOtp({ confirmationResult, onVerified }) {
+export default function AuthOtp({ confirmationResult, email, onVerified }) {
   const [code, setCode] = useState("");
   const [error, setError] = useState("");
 
   const handleVerify = async () => {
     try {
-      const result = await confirmationResult.confirm(code);
-      onVerified(result.user); // callback pour naviguer ou mettre à jour l'état
+      // Vérification OTP côté Firebase
+      await confirmationResult.confirm(code);
+
+      // Puis création du compte côté backend
+      await axios.post(
+        "https://allo-bailleur-backend-1.onrender.com/auth/complete-registration",
+        { email, otp: code }
+      );
+
+      onVerified(); // navigation ou mise à jour front
     } catch (err) {
       console.error(err);
-      setError("Code incorrect ou expiré");
+      setError(
+        err.response?.data?.detail || "Code incorrect ou expiré"
+      );
     }
   };
 
