@@ -8,7 +8,6 @@ import "./Register.css";
 
 export default function Register() {
   const navigate = useNavigate();
-
   const [formData, setFormData] = useState({
     email: "",
     full_name: "",
@@ -19,73 +18,60 @@ export default function Register() {
   const [profileImage, setProfileImage] = useState(null);
   const [error, setError] = useState("");
   const [confirmationResult, setConfirmationResult] = useState(null);
-  const [verificationMethod, setVerificationMethod] = useState(""); // "email" | "sms"
   const [emailLink, setEmailLink] = useState("");
+  const [method, setMethod] = useState("");
 
   const handleChange = (e) =>
-    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-
+    setFormData((p) => ({ ...p, [e.target.name]: e.target.value }));
   const handleFileChange = (e) => setProfileImage(e.target.files[0]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
-
     try {
-      // Normalisation numéro au format E.164
       let phoneNumber = formData.phone.replace(/\D/g, "");
       if (!phoneNumber.startsWith("+")) phoneNumber = "+237" + phoneNumber;
 
       const data = new FormData();
-      data.append("email", formData.email);
-      data.append("full_name", formData.full_name);
-      data.append("phone", phoneNumber);
-      data.append("password", formData.password);
-      data.append("role", formData.role);
+      Object.entries({ ...formData, phone: phoneNumber }).forEach(([k, v]) =>
+        data.append(k, v)
+      );
       if (profileImage) data.append("profile_image", profileImage);
 
-      // Choix méthode
-      const method = window.confirm(
+      const m = window.confirm(
         "Recevoir OTP par SMS ? (OK = SMS / Annuler = Email)"
       )
         ? "sms"
         : "email";
-      setVerificationMethod(method);
-      data.append("method", method);
+      setMethod(m);
+      data.append("method", m);
 
-      const response = await axios.post(
+      const res = await axios.post(
         "https://allo-bailleur-backend-1.onrender.com/auth/start-registration",
         data
       );
 
-      if (method === "sms") {
-        // Recaptcha invisible
-        const recaptchaVerifier = new RecaptchaVerifier(
+      if (m === "email") {
+        setEmailLink(res.data.email_verification_link);
+        alert("Vérifiez votre email et cliquez sur le lien.");
+      } else {
+        // reCAPTCHA invisible
+        const verifier = new RecaptchaVerifier(
           "recaptcha-container",
           { size: "invisible" },
           auth
         );
-        await recaptchaVerifier.render();
-
+        await verifier.render();
         const confirmation = await signInWithPhoneNumber(
           auth,
           phoneNumber,
-          recaptchaVerifier
+          verifier
         );
         setConfirmationResult(confirmation);
-      } else if (method === "email") {
-        setEmailLink(response.data.email_verification_link);
-        alert(
-          "Lien de vérification envoyé à votre email. Cliquez dessus pour valider votre compte."
-        );
       }
     } catch (err) {
       console.error(err);
-      setError(
-        err.response?.data?.detail ||
-        err.message ||
-        "Erreur lors de l'inscription"
-      );
+      setError(err.response?.data?.detail || err.message);
     }
   };
 
@@ -97,78 +83,56 @@ export default function Register() {
 
         {!emailLink && !confirmationResult && (
           <form onSubmit={handleSubmit} encType="multipart/form-data">
+            {/* champs identiques */}
             <label>Email:</label>
-            <input
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              required
-            />
-
+            <input name="email" type="email" onChange={handleChange} required />
             <label>Nom complet:</label>
-            <input
-              type="text"
-              name="full_name"
-              value={formData.full_name}
-              onChange={handleChange}
-              required
-            />
-
+            <input name="full_name" onChange={handleChange} required />
             <label>Téléphone:</label>
-            <input
-              type="text"
-              name="phone"
-              value={formData.phone}
-              onChange={handleChange}
-              required
-            />
-
+            <input name="phone" onChange={handleChange} required />
             <label>Mot de passe:</label>
             <input
-              type="password"
               name="password"
-              value={formData.password}
+              type="password"
               onChange={handleChange}
               required
             />
-
             <label>Rôle:</label>
-            <select
-              name="role"
-              value={formData.role}
-              onChange={handleChange}
-              required
-            >
+            <select name="role" onChange={handleChange} value={formData.role}>
               <option value="client">Client</option>
               <option value="bailleur">Bailleur</option>
             </select>
-
-            <label>Image de profil (optionnel):</label>
+            <label>Image profil:</label>
             <input type="file" accept="image/*" onChange={handleFileChange} />
-
             <button type="submit">S’inscrire</button>
           </form>
         )}
 
         {emailLink && (
-          <div>
-            <p>Vérifiez votre boîte email et cliquez sur le lien pour confirmer votre compte.</p>
-            <a href={emailLink} target="_blank" rel="noopener noreferrer">
-              Vérifier l'email
+          <p>
+            Lien de vérification envoyé.{" "}
+            <a href={emailLink} target="_blank" rel="noreferrer">
+              Ouvrir le lien
             </a>
-          </div>
+          </p>
         )}
 
         {confirmationResult && (
-          <div style={{ marginTop: "1rem" }}>
-            <AuthOtp
-              confirmationResult={confirmationResult}
-              onVerified={(user) => navigate("/")}
-            />
-          </div>
+          <AuthOtp
+            confirmationResult={confirmationResult}
+            email={formData.email}
+            onVerified={async () => {
+              // On suppose que l'OTP est ok côté Firebase,
+              // on appelle le backend pour créer l'utilisateur
+              const otpPrompt = prompt("Entrez le code reçu par SMS");
+              await axios.post(
+                "https://allo-bailleur-backend-1.onrender.com/auth/complete-registration",
+                { email: formData.email, otp: otpPrompt }
+              );
+              navigate("/");
+            }}
+          />
         )}
-
         <div id="recaptcha-container"></div>
       </div>
     </div>
