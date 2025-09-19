@@ -1,15 +1,13 @@
-// src/pages/Register.jsx
 import { useState } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { auth } from "../firebaseClient";
-import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
+import axios from "axios";
+import { auth, setupRecaptcha } from "../firebaseClient";
+import { signInWithPhoneNumber } from "firebase/auth";
 import AuthOtp from "../components/AuthOtp/AuthOtp";
 import "./Register.css";
 
 export default function Register() {
   const navigate = useNavigate();
-
   const [formData, setFormData] = useState({
     email: "",
     full_name: "",
@@ -22,32 +20,16 @@ export default function Register() {
   const [confirmationResult, setConfirmationResult] = useState(null);
   const [emailLink, setEmailLink] = useState("");
 
-  // ---------------------------
-  // Handlers
-  // ---------------------------
   const handleChange = (e) =>
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
 
   const handleFileChange = (e) => setProfileImage(e.target.files[0]);
-
-  // Initialise un reCAPTCHA invisible
-  const setupRecaptcha = () => {
-    if (!window.recaptchaVerifier) {
-      window.recaptchaVerifier = new RecaptchaVerifier(
-        "recaptcha-container",
-        { size: "invisible" },
-        auth
-      );
-      window.recaptchaVerifier.render();
-    }
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
 
     try {
-      // Normalise le numéro au format E.164 (+237 pour le Cameroun)
       let phoneNumber = formData.phone.replace(/\D/g, "");
       if (!phoneNumber.startsWith("+")) phoneNumber = "+237" + phoneNumber;
 
@@ -59,7 +41,6 @@ export default function Register() {
       data.append("role", formData.role);
       if (profileImage) data.append("profile_image", profileImage);
 
-      // Choix méthode OTP : OK = SMS, Annuler = Email
       const method = window.confirm(
         "Recevoir OTP par SMS ? (OK = SMS / Annuler = Email)"
       )
@@ -73,7 +54,7 @@ export default function Register() {
       );
 
       if (method === "sms") {
-        // ✅ SMS: on déclenche le reCAPTCHA invisible puis envoi du code
+        // ✅ reCAPTCHA invisible + OTP
         setupRecaptcha();
         const confirmation = await signInWithPhoneNumber(
           auth,
@@ -82,7 +63,6 @@ export default function Register() {
         );
         setConfirmationResult(confirmation);
       } else {
-        // ✅ Email: lien de vérification
         setEmailLink(response.data.email_verification_link);
         alert(
           "Lien de vérification envoyé à votre email. Cliquez dessus pour valider votre compte."
@@ -98,9 +78,6 @@ export default function Register() {
     }
   };
 
-  // ---------------------------
-  // JSX
-  // ---------------------------
   return (
     <div className="register-page">
       <div className="register-container">
@@ -176,15 +153,13 @@ export default function Register() {
         )}
 
         {confirmationResult && (
-          <div style={{ marginTop: "1rem" }}>
-            <AuthOtp
-              confirmationResult={confirmationResult}
-              onVerified={() => navigate("/")}
-            />
-          </div>
+          <AuthOtp
+            confirmationResult={confirmationResult}
+            onVerified={() => navigate("/")}
+          />
         )}
 
-        {/* Conteneur obligatoire pour le reCAPTCHA */}
+        {/* Conteneur reCAPTCHA */}
         <div id="recaptcha-container"></div>
       </div>
     </div>
