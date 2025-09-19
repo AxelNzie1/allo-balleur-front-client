@@ -128,7 +128,7 @@ export default function Header() {
     setLoginError("");
     
     try {
-      const res = await axios.post("https://allo-bailleur-backend-1.onrender.com/auth/start-registration", { phone, password });
+      const res = await axios.post("https://allo-bailleur-backend-1.onrender.com/auth/login", { phone, password });
       localStorage.setItem("token", res.data.access_token);
       setIsLoggedIn(true);
       const me = await axios.get("https://allo-bailleur-backend-1.onrender.com/users/me", {
