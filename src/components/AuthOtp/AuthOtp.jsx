@@ -7,21 +7,18 @@ export default function AuthOtp({ confirmationResult, email, onVerified }) {
 
   const handleVerify = async () => {
     try {
-      // Vérification OTP côté Firebase
       await confirmationResult.confirm(code);
 
-      // Puis création du compte côté backend
+      // Envoie au backend pour compléter l'inscription
       await axios.post(
         "https://allo-bailleur-backend-1.onrender.com/auth/complete-registration",
-        { email, otp: code }
+        new URLSearchParams({ email, otp: code })
       );
 
-      onVerified(); // navigation ou mise à jour front
+      onVerified();
     } catch (err) {
       console.error(err);
-      setError(
-        err.response?.data?.detail || "Code incorrect ou expiré"
-      );
+      setError("Code incorrect ou expiré");
     }
   };
 

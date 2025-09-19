@@ -1,10 +1,10 @@
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { auth } from "../firebaseClient";
-import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
+import { auth, setupRecaptcha } from "../firebaseClient";
 import AuthOtp from "../components/AuthOtp/AuthOtp";
 import "./Register.css";
+import { signInWithPhoneNumber } from "firebase/auth";
 
 export default function Register() {
   const navigate = useNavigate();
@@ -19,7 +19,6 @@ export default function Register() {
   const [profileImage, setProfileImage] = useState(null);
   const [error, setError] = useState("");
   const [confirmationResult, setConfirmationResult] = useState(null);
-  const [emailLink, setEmailLink] = useState("");
   const [verificationMethod, setVerificationMethod] = useState(""); // "email" | "sms"
 
   const handleChange = (e) =>
@@ -32,7 +31,7 @@ export default function Register() {
     setError("");
 
     try {
-      // Normalisation du numéro
+      // Normalisation numéro au format E.164
       let phoneNumber = formData.phone.replace(/\D/g, "");
       if (!phoneNumber.startsWith("+")) phoneNumber = "+237" + phoneNumber;
 
@@ -44,7 +43,7 @@ export default function Register() {
       data.append("role", formData.role);
       if (profileImage) data.append("profile_image", profileImage);
 
-      // Choix méthode OTP
+      // Choix méthode
       const method = window.confirm(
         "Recevoir OTP par SMS ? (OK = SMS / Annuler = Email)"
       )
@@ -59,16 +58,14 @@ export default function Register() {
       );
 
       if (method === "sms") {
-        // --- reCAPTCHA invisible obligatoire pour prod ---
-        const verifier = new RecaptchaVerifier(auth, "recaptcha-container", {
-          size: "invisible",
-        });
-        await verifier.render();
-
-        const confirmation = await signInWithPhoneNumber(auth, phoneNumber, verifier);
+        setupRecaptcha();
+        const confirmation = await signInWithPhoneNumber(
+          auth,
+          phoneNumber,
+          window.recaptchaVerifier
+        );
         setConfirmationResult(confirmation);
       } else if (method === "email") {
-        setEmailLink(response.data.email_verification_link);
         alert(
           "Lien de vérification envoyé à votre email. Cliquez dessus pour valider votre compte."
         );
@@ -76,7 +73,9 @@ export default function Register() {
     } catch (err) {
       console.error(err);
       setError(
-        err.response?.data?.detail || err.message || "Erreur lors de l'inscription"
+        err.response?.data?.detail ||
+        err.message ||
+        "Erreur lors de l'inscription"
       );
     }
   };
@@ -87,7 +86,7 @@ export default function Register() {
         <h2>Inscription</h2>
         {error && <p style={{ color: "red" }}>{error}</p>}
 
-        {!emailLink && !confirmationResult && (
+        {!confirmationResult && (
           <form onSubmit={handleSubmit} encType="multipart/form-data">
             <label>Email:</label>
             <input
@@ -143,23 +142,12 @@ export default function Register() {
           </form>
         )}
 
-        {emailLink && (
-          <div>
-            <p>Vérifiez votre boîte email et cliquez sur le lien pour confirmer votre compte.</p>
-            <a href={emailLink} target="_blank" rel="noopener noreferrer">
-              Vérifier l'email
-            </a>
-          </div>
-        )}
-
         {confirmationResult && (
-          <div style={{ marginTop: "1rem" }}>
-            <AuthOtp
-              confirmationResult={confirmationResult}
-              email={formData.email}
-              onVerified={() => navigate("/")}
-            />
-          </div>
+          <AuthOtp
+            confirmationResult={confirmationResult}
+            email={formData.email}
+            onVerified={() => navigate("/")}
+          />
         )}
 
         <div id="recaptcha-container"></div>
