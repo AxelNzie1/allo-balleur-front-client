@@ -101,7 +101,7 @@ const BailleurProfil = () => {
 
   const handleRechargeCampay = async () => {
     const amount = parseInt(rechargeAmount);
-    
+
     if (!amount || isNaN(amount) || amount < 1000) {
       alert("Montant invalide. Le minimum est de 1000 FCFA.");
       return;
@@ -120,7 +120,7 @@ const BailleurProfil = () => {
         { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
       );
 
-      alert(`Demande de paiement envoyée ! Référence: ${response.data.campay_reference}`);
+      alert(`Demande de paiement envoyée pour ${campayPhone} ! Référence: ${response.data.campay_reference}`);
       setRechargeAmount("");
       setCampayPhone("");
       setSelectedPack(null);
@@ -246,8 +246,7 @@ const BailleurProfil = () => {
         <div className="token-card">
           {isPro && <div className="pro-badge">⭐ PRO</div>}
           <h2 className="token-header">
-            💰 Solde de jetons :
-            <span className="token-balance">{tokenBalance} jetons</span>
+            💰 Solde de jetons : <span className="token-balance">{tokenBalance} jetons</span>
           </h2>
 
           <div className="recharge-packs">
@@ -262,8 +261,7 @@ const BailleurProfil = () => {
                   <div className="pack-tokens">{pack.tokens} tokens</div>
                   <div className="pack-amount">{pack.amount.toLocaleString()} FCFA</div>
                   <div className="pack-bonus">
-                    {pack.tokens > (pack.amount / 100) && 
-                     `+${pack.tokens - Math.floor(pack.amount / 100)} bonus`}
+                    {pack.tokens > (pack.amount / 100) && `+${pack.tokens - Math.floor(pack.amount / 100)} bonus`}
                   </div>
                 </div>
               ))}
@@ -281,9 +279,9 @@ const BailleurProfil = () => {
               <label>Téléphone Mobile Money</label>
               <input
                 type="text"
-                placeholder="237690000000"
-                value={campayPhone}
-                onChange={(e) => setCampayPhone(e.target.value)}
+                placeholder="690000000"
+                value={campayPhone.replace(/^237/, "")}
+                onChange={(e) => setCampayPhone("237" + e.target.value.replace(/^237/, ""))}
                 className="recharge-input"
               />
             </div>
@@ -293,10 +291,7 @@ const BailleurProfil = () => {
                 type="number"
                 placeholder="1000"
                 value={rechargeAmount}
-                onChange={(e) => {
-                  setRechargeAmount(e.target.value);
-                  setSelectedPack(null);
-                }}
+                onChange={(e) => { setRechargeAmount(e.target.value); setSelectedPack(null); }}
                 className="recharge-input"
                 min="1000"
                 step="100"
@@ -307,9 +302,7 @@ const BailleurProfil = () => {
               onClick={handleRechargeCampay}
               disabled={!campayPhone || !rechargeAmount || isLoadingCampay || parseInt(rechargeAmount) < 1000}
             >
-              {isLoadingCampay ? "⏳ Traitement..." :
-               selectedPack ? `📱 Payer ${selectedPack.amount.toLocaleString()} FCFA` :
-               "📱 Recharger avec Mobile Money"}
+              {isLoadingCampay ? "⏳ Traitement..." : selectedPack ? `📱 Payer ${selectedPack.amount.toLocaleString()} FCFA` : "📱 Recharger avec Mobile Money"}
             </button>
           </div>
 
@@ -349,7 +342,7 @@ const BailleurProfil = () => {
 
         {/* Section Profil */}
         <div className="profile-section">
-          <h2>📝 Mise à jour du profil</h2>
+          <h2>Mise à jour du profil</h2>
           <div className="input-group">
             <label>Nom complet</label>
             <input value={fullName} onChange={(e) => setFullName(e.target.value)} className="profile-input" />
@@ -380,7 +373,7 @@ const BailleurProfil = () => {
           <>
             <hr className="section-divider" />
             <div className="kyc-section">
-              <h2>📤 Vérification KYC</h2>
+              <h2>Vérification KYC</h2>
               <p className="kyc-info">Pour devenir bailleur vérifié, veuillez uploader les documents suivants :</p>
               
               <div className="kyc-docs">
@@ -403,7 +396,7 @@ const BailleurProfil = () => {
                 className="kyc-upload-btn"
                 disabled={isLoadingKycUpload}
               >
-                {isLoadingKycUpload ? "⏳ Soumission en cours..." : "📤 Uploader les documents"}
+                {isLoadingKycUpload ? "⏳ Soumission en cours..." : "Uploader les documents"}
               </button>
 
               <div className="kyc-status-container">
@@ -416,7 +409,7 @@ const BailleurProfil = () => {
                   className="kyc-submit-btn"
                   disabled={isLoadingKycSubmit}
                 >
-                  {isLoadingKycSubmit ? "⏳ Soumission en cours..." : "✅ Soumettre le dossier KYC"}
+                  {isLoadingKycSubmit ? "Soumission en cours..." : "Soumettre le dossier KYC"}
                 </button>
               )}
             </div>
