@@ -82,8 +82,8 @@
 .pd-carousel-image {
   width: 100%;
   aspect-ratio: 16 / 9;
-  object-fit: cover;
-  border-radius: 20px; /* coins bien arrondis */
+  object-fit: cover; /* desktop par défaut */
+  border-radius: 20px;
   transition: transform 0.5s ease;
 }
 
@@ -124,18 +124,7 @@
   color: #555;
 }
 
-
 /* Miniatures du carrousel */
-.pd-thumbnail {
-  width: 80px;
-  height: 60px;
-  object-fit: cover;
-  border-radius: 12px; /* coins arrondis pour miniatures */
-  cursor: pointer;
-  border: 2px solid transparent;
-  transition: all 0.3s;
-}
-
 .pd-thumbnail {
   width: 80px;
   height: 60px;
@@ -712,372 +701,156 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
-  margin: 15px 0;
-  flex-wrap: wrap;
+  gap: 8px;
+  font-size: 0.9rem;
+  color: #7f8c8d;
+  margin-top: 10px;
 }
 
-.pd-token-icon {
-  font-size: 2rem;
-  color: #f1c40f;
+.pd-token-info-icon {
+  color: #3498db;
 }
 
-.pd-token-icon.pd-warning {
-  color: #e74c3c;
+.pd-token-warning-icon {
+  color: #f39c12;
 }
 
-/* Report Dialog */
-.pd-report-dialog-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
+.pd-contact-form {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-  animation: fadeIn 0.3s;
-  padding: 15px;
-  box-sizing: border-box;
+  flex-direction: column;
+  gap: 15px;
 }
 
-.pd-report-dialog {
-  background: white;
-  border-radius: 10px;
-  padding: 30px;
-  width: 100%;
-  max-width: 500px;
-  max-height: 90vh;
-  overflow-y: auto;
-  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
-  position: relative;
-  animation: slideUp 0.3s;
-}
-
-.pd-report-dialog h3 {
-  margin-top: 0;
-  color: #d80d68;
-  border-bottom: 1px solid #eee;
-  padding-bottom: 10px;
-}
-
-.pd-report-reasons {
-  margin: 15px 0;
-}
-
-.pd-reason-option {
-  margin-bottom: 10px;
+.pd-contact-form label {
   display: flex;
-  align-items: center;
-  padding: 8px;
-  border-radius: 5px;
-  transition: background 0.2s;
+  flex-direction: column;
+  font-size: 0.9rem;
+  color: #2c3e50;
 }
 
-.pd-reason-option:hover {
-  background: #f5f5f5;
-}
-
-.pd-reason-option input {
-  margin-right: 10px;
-}
-
-.pd-reason-option label {
-  cursor: pointer;
-  flex-grow: 1;
-}
-
-.pd-report-textarea {
-  width: 100%;
-  padding: 12px;
+.pd-contact-form input,
+.pd-contact-form textarea {
+  padding: 10px;
   border: 1px solid #ddd;
   border-radius: 5px;
+  margin-top: 5px;
+  font-size: 0.9rem;
+}
+
+.pd-contact-form textarea {
   resize: vertical;
   min-height: 100px;
-  margin-top: 10px;
-  font-family: inherit;
-  transition: border 0.3s;
-  box-sizing: border-box;
 }
 
-.pd-report-textarea:focus {
-  border-color: #ff008c;
-  outline: none;
-}
-
-.pd-report-error {
-  color: #e74c3c;
-  background: #fdedec;
-  padding: 10px;
-  border-radius: 5px;
-  margin: 10px 0;
-  font-size: 0.9rem;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
-
-.pd-report-success {
-  text-align: center;
-  padding: 20px;
-}
-
-.pd-success-icon {
-  font-size: 3rem;
-  color: #27ae60;
-  margin-bottom: 15px;
-}
-
-.pd-dialog-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px;
-  margin-top: 20px;
-  flex-wrap: wrap;
-}
-
-.pd-close-dialog-btn {
-  position: absolute;
-  top: 15px;
-  right: 15px;
-  background: none;
+.pd-contact-form button {
+  align-self: flex-end;
+  background: #ff008c;
+  color: white;
   border: none;
-  font-size: 1.5rem;
+  padding: 10px 20px;
+  border-radius: 5px;
   cursor: pointer;
-  color: #95a5a6;
-  transition: color 0.3s;
+  transition: background-color 0.3s;
 }
 
-.pd-close-dialog-btn:hover {
-  color: #e74c3c;
-}
-
-.pd-spinner {
-  width: 20px;
-  height: 20px;
-  border: 3px solid rgba(255, 255, 255, 0.3);
-  border-radius: 50%;
-  border-top-color: white;
-  animation: spin 1s ease-in-out infinite;
-  display: inline-block;
-}
-
-.pd-spinner.pd-small {
-  width: 15px;
-  height: 15px;
-  border-width: 2px;
-}
-
-/* Styles pour la zone de texte du message */
-.pd-message-textarea {
-  width: 100%;
-  padding: 12px;
-  border: 2px solid #e2e8f0;
-  border-radius: 8px;
-  font-family: inherit;
-  font-size: 14px;
-  resize: vertical;
-  margin: 15px 0;
-  min-height: 120px;
-  transition: border-color 0.3s ease;
-  box-sizing: border-box;
-}
-
-.pd-message-textarea:focus {
-  outline: none;
-  border-color: #667eea;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-}
-
-.pd-message-textarea::placeholder {
-  color: #a0aec0;
+.pd-contact-form button:hover {
+  background: #e0007c;
 }
 
 /* ============================ */
 /* RESPONSIVE DESIGN */
 /* ============================ */
 
-/* Tablets and small desktops */
+/* Tablettes */
 @media (max-width: 1024px) {
-  .pd-container {
-    margin-top: 90px;
-  }
-  
-  .pd-card {
-    padding: 15px;
-    gap: 20px;
-  }
-  
-  .pd-carousel-image {
-    height: 550px;
-  }
-}
-
-/* Tablets */
-@media (max-width: 768px) {
   .pd-card {
     flex-direction: column;
   }
-  
-  .pd-image-carousel, .pd-info-section {
+
+  .pd-image-carousel,
+  .pd-info-section {
     min-width: 100%;
   }
-  
+
   .pd-carousel-image {
-    height: 300px;
+    height: auto;
   }
-  
-  .pd-card-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  
-  .pd-header h1 {
-    font-size: 1.5rem;
+
+  .pd-thumbnail {
+    width: 70px;
+    height: auto;
   }
 }
 
-/* Large phones */
-@media (max-width: 600px) {
+/* Mobile */
+@media (max-width: 768px) {
   .pd-container {
-    margin-top: 80px;
+    margin: 60px 10px 20px;
     padding: 0 10px;
   }
-  
-  .pd-card {
-    padding: 10px;
-    gap: 15px;
-  }
-  
-  .pd-carousel-image {
-    height: 550px;
-  }
-  
-  .pd-thumbnail {
-    width: 60px;
-    height: 45px;
-  }
-  
-  .pd-carousel-controls {
-    gap: 10px;
-  }
-  
-  .pd-carousel-btn {
-    width: 35px;
-    height: 35px;
-  }
-  
-  .pd-info-card {
-    padding: 10px;
-  }
-  
-  .pd-info-icon {
-    font-size: 1.2rem;
-  }
-  
-  .pd-like-btn, .pd-engagement-btn {
-    padding: 8px 12px;
-    font-size: 0.8rem;
-  }
-  
-  .pd-popup-content, .pd-report-dialog {
-    padding: 20px;
-  }
-  
-  .pd-popup-buttons, .pd-dialog-actions {
-    flex-direction: column;
-    gap: 10px;
-  }
-  
-  .pd-popup-btn {
-    width: 100%;
-  }
-}
 
-/* Small phones */
-@media (max-width: 480px) {
-  .pd-carousel-image {
-    height: 450px;
-  }
-  
   .pd-header h1 {
+    font-size: 1.6rem;
+  }
+
+  .pd-sub-info {
+    font-size: 0.95rem;
+  }
+
+  .pd-description-box h2 {
     font-size: 1.3rem;
   }
-  
-  .pd-card-grid {
-    grid-template-columns: 1fr;
-    gap: 10px;
+
+  .pd-description-box p {
+    font-size: 0.95rem;
   }
-  
-  .pd-section-separator {
-    margin: 15px 0;
-  }
-  
-  .pd-star-rating {
-    gap: 3px;
-  }
-  
-  .pd-star {
-    font-size: 1.2rem;
-  }
-  
-  .pd-thumbnails {
-    gap: 5px;
-  }
-  
+
   .pd-thumbnail {
-    width: 50px;
-    height: 40px;
-  }
-  
-  .pd-description-box {
-    padding: 15px;
-  }
-  
-  .pd-description-box h2 {
-    font-size: 1.2rem;
-  }
-  
-  .pd-contact-btn {
-    padding: 10px 15px;
-    font-size: 13px;
-  }
-  
-  .pd-view-phone-btn {
-    padding: 6px 10px;
-    font-size: 0.8rem;
-  }
-  
-  .pd-reserve-btn {
-    max-width: 100%;
+    width: 60px;
+    height: auto;
   }
 }
 
-/* Very small phones */
+/* -------- Correctif anti-coupe sur téléphone -------- */
+@media (max-width: 600px) {
+  .pd-carousel-image {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    object-fit: contain;
+  }
+
+  .pd-thumbnail {
+    width: 50px;
+    height: auto;
+    object-fit: contain;
+  }
+}
+
+@media (max-width: 480px) {
+  .pd-carousel-image {
+    height: auto;
+    aspect-ratio: auto;
+    object-fit: contain;
+  }
+
+  .pd-thumbnail {
+    width: 40px;
+    height: auto;
+    object-fit: contain;
+  }
+}
+
 @media (max-width: 360px) {
   .pd-carousel-image {
-    height: 380px;
+    height: auto;
+    aspect-ratio: auto;
+    object-fit: contain;
   }
-  
-  .pd-header h1 {
-    font-size: 1.1rem;
-  }
-  
-  .pd-sub-info {
-    font-size: 0.9rem;
-  }
-  
-  .pd-like-btn, .pd-engagement-btn {
-    padding: 6px 10px;
-    font-size: 0.75rem;
-  }
-  
-  .pd-favorites-note, .pd-engagement-note {
-    font-size: 0.7rem;
-  }
-  
-  .pd-popup-content, .pd-report-dialog {
-    padding: 15px;
+
+  .pd-thumbnail {
+    width: 35px;
+    height: auto;
+    object-fit: contain;
   }
 }
