@@ -1,120 +1,105 @@
-/* Container principal */
+:root {
+  --primary-color: #FF0086;
+  --secondary-color: #fff;
+  --text-color: #333;
+  --bg-light: #f9f9f9;
+  --border-color: #eee;
+  --card-bg: #FFE9F6;
+  --card-radius: 12px;
+}
+
+/* --- Container global --- */
 .vue-globale-container {
-  padding: 20px;
-  font-family: 'Inter', sans-serif;
-  background-color: #f9f9fb;
-  color: #333;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  font-family: 'Segoe UI', sans-serif;
+  color: var(--text-color);
 }
 
-/* Titres principaux et secondaires */
-.vue-globale-container h2 {
-  font-size: 1.8rem;
-  font-weight: 700;
-  color: #222;
-  margin-bottom: 20px;
+.vue-globale-container h2, .vue-globale-container h3, .vue-globale-container h4 {
+  color: var(--primary-color);
+  margin-bottom: 0.5rem;
 }
 
-.vue-globale-container h3 {
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: #444;
-  margin-bottom: 15px;
-}
-
-.vue-globale-container h4 {
-  font-size: 1.2rem;
-  font-weight: 500;
-  color: #555;
-  margin-bottom: 10px;
-}
-
-/* Statistiques rapides */
+/* --- Cartes de stats --- */
 .stats-grid {
   display: flex;
-  gap: 20px;
   flex-wrap: wrap;
+  gap: 20px;
   margin-top: 20px;
 }
 
 .stat-card {
-  flex: 1 1 200px;
+  flex: 1;
+  min-width: 200px;
   padding: 20px;
-  background: #ffffff;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  background-color: var(--card-bg);
+  border-radius: var(--card-radius);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  text-align: center;
+  transition: transform 0.3s, box-shadow 0.3s;
 }
 
 .stat-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
-.stat-card p {
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: #222;
-}
-
-/* Sections graphiques */
+/* --- Graphiques --- */
 .chart-section {
   margin-top: 40px;
   display: flex;
   gap: 40px;
   flex-wrap: wrap;
-  align-items: flex-start;
 }
 
 .chart-container {
-  flex: 1 1 300px;
-  height: 300px;
-  background: #fff;
-  border-radius: 12px;
+  flex: 1;
+  min-height: 300px;
+  background-color: var(--bg-light);
   padding: 20px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  border-radius: var(--card-radius);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
 }
 
-/* Tooltip personnalisé pour recharts */
-.recharts-tooltip-wrapper {
-  font-size: 0.9rem !important;
-  background: #ffffff !important;
-  border-radius: 8px !important;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1) !important;
-  padding: 8px !important;
+/* --- Détails listes --- */
+.details-list, .maisons-reservees {
+  margin-top: 20px;
+  padding: 0;
+  list-style: none;
 }
 
-/* Legend */
-.recharts-legend-item text {
-  font-size: 0.9rem;
-  fill: #333;
+.details-list li, .maisons-reservees li {
+  padding: 10px;
+  border-bottom: 1px solid var(--border-color);
 }
 
-/* Détails texte sous les graphiques */
-.chart-details {
-  flex: 1 1 300px;
-  background: #ffffff;
-  border-radius: 12px;
-  padding: 20px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-  font-size: 0.95rem;
-  line-height: 1.5;
-  color: #444;
+.details-list li:last-child, .maisons-reservees li:last-child {
+  border-bottom: none;
 }
 
-/* Messages d'erreur ou de chargement */
-.loading, .error, .no-data {
-  font-size: 1.1rem;
-  text-align: center;
-  margin-top: 40px;
+/* --- Titres graphiques --- */
+.chart-container h3 {
+  margin-bottom: 1rem;
+  font-size: 1.2rem;
 }
 
-.error {
-  color: #ff4d4f;
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-  .stats-grid, .chart-section {
+/* --- Responsivité --- */
+@media (max-width: 992px) {
+  .stats-grid {
     flex-direction: column;
+  }
+  .chart-section {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 576px) {
+  .stat-card {
+    padding: 15px;
+  }
+  .chart-container {
+    padding: 15px;
   }
 }
