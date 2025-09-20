@@ -1,4 +1,4 @@
-/* Couleur principale */
+/* Couleurs principales */
 :root {
   --primary-color: #FF0086;
   --secondary-color: #fff;
@@ -6,6 +6,9 @@
   --bg-light: #f9f9f9;
   --border-color: #eee;
   --danger-color: #ff4d4f;
+  --success-color: #28a745;
+  --hover-color: #e60075;
+  --font-base: 'Segoe UI', sans-serif;
 }
 
 /* --- Container principal --- */
@@ -13,15 +16,19 @@
   max-width: 1200px;
   margin: 0 auto;
   padding: 2rem;
-  font-family: 'Segoe UI', sans-serif;
+  font-family: var(--font-base);
   color: var(--text-color);
 }
 
-.subscription-container h2, .subscription-container h3, .subscription-container h4 {
+/* Titres */
+.subscription-container h2, 
+.subscription-container h3, 
+.subscription-container h4 {
   color: var(--primary-color);
+  margin-bottom: 0.5rem;
 }
 
-/* --- Erreurs et loading --- */
+/* Loading / Error */
 .loading, .error {
   text-align: center;
   padding: 1.5rem;
@@ -36,17 +43,23 @@
 
 .description-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 1.5rem;
 }
 
 .description-card {
   background-color: var(--bg-light);
-  padding: 1rem 1.5rem;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  padding: 1.5rem;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.05);
   display: flex;
   flex-direction: column;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.description-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.08);
 }
 
 .description-header {
@@ -59,13 +72,14 @@
 .badge {
   background-color: var(--primary-color);
   color: var(--secondary-color);
-  padding: 2px 8px;
-  border-radius: 6px;
+  padding: 3px 10px;
+  border-radius: 8px;
   font-size: 0.75rem;
   font-weight: 600;
   text-transform: uppercase;
 }
 
+/* Feature list */
 .feature-list {
   display: flex;
   flex-direction: column;
@@ -76,10 +90,16 @@
 .feature-item {
   display: flex;
   gap: 0.75rem;
+  align-items: flex-start;
 }
 
 .feature-icon {
-  font-size: 1.5rem;
+  font-size: 1.7rem;
+  line-height: 1;
+}
+
+.feature-text {
+  flex: 1;
 }
 
 .feature-text p {
@@ -91,37 +111,48 @@
 /* --- Cartes d'abonnement --- */
 .subscription-card {
   background-color: var(--bg-light);
-  padding: 1.5rem;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-  margin-bottom: 1.5rem;
+  padding: 2rem;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+  margin-bottom: 2rem;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.subscription-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.08);
 }
 
 .subscription-card h3 {
   margin-bottom: 1rem;
 }
 
+/* Statut */
 .status span.active {
   color: #fff;
   background-color: var(--primary-color);
-  padding: 2px 8px;
-  border-radius: 6px;
+  padding: 4px 10px;
+  border-radius: 8px;
   font-weight: 600;
+  font-size: 0.85rem;
 }
 
 .status span.inactive {
   color: #fff;
   background-color: #888;
-  padding: 2px 8px;
-  border-radius: 6px;
+  padding: 4px 10px;
+  border-radius: 8px;
   font-weight: 600;
+  font-size: 0.85rem;
 }
 
+/* Prix et solde */
 .price p {
   margin: 0.25rem 0;
   font-weight: 500;
 }
 
+/* Avantages */
 .benefits {
   margin: 1rem 0;
 }
@@ -146,12 +177,13 @@
 }
 
 button {
-  padding: 10px 16px;
+  padding: 12px 18px;
   border: none;
-  border-radius: 8px;
+  border-radius: 12px;
   font-weight: 600;
   cursor: pointer;
-  transition: 0.3s;
+  transition: all 0.3s;
+  font-size: 0.95rem;
 }
 
 button.primary {
@@ -160,7 +192,7 @@ button.primary {
 }
 
 button.primary:hover:not(:disabled) {
-  background-color: #e60075;
+  background-color: var(--hover-color);
 }
 
 button.secondary {
@@ -178,7 +210,7 @@ button.disabled {
 }
 
 button.active-btn {
-  background-color: #28a745;
+  background-color: var(--success-color);
   color: #fff;
   cursor: default;
 }
@@ -188,12 +220,31 @@ button.active-btn {
   margin-top: 2rem;
   padding: 1rem;
   background-color: var(--bg-light);
-  border-radius: 12px;
+  border-radius: 16px;
   text-align: center;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+/* --- Inputs et formulaires --- */
+input, select, textarea {
+  width: 100%;
+  padding: 10px 12px;
+  margin: 5px 0;
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+  font-size: 0.95rem;
+  box-sizing: border-box;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(255,0,134,0.2);
 }
 
 /* --- Responsive --- */
-@media (max-width: 768px) {
+@media (max-width: 992px) {
   .description-grid {
     grid-template-columns: 1fr;
   }
@@ -208,5 +259,23 @@ button.active-btn {
 
   button {
     width: 100%;
+  }
+}
+
+@media (max-width: 576px) {
+  .subscription-container {
+    padding: 1rem;
+  }
+
+  .subscription-card, .description-card {
+    padding: 1.2rem;
+  }
+
+  .feature-icon {
+    font-size: 1.5rem;
+  }
+
+  button {
+    padding: 10px 14px;
   }
 }
