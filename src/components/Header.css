@@ -15,10 +15,6 @@
   z-index: 1000;
 }
 
-/* ajoute ce bloc pour corriger le décalage causé par le header fixé */
-body {
-  padding-top: 0px; /* adapte cette valeur si ton header est plus grand */
-}
 
 .header-logo {
   text-decoration: none;

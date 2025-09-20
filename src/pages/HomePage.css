@@ -3,7 +3,7 @@
   display: flex;
   gap: 32px;
   padding: 24px;
-  padding-top: 240px; /* Desktop : espace pour header */
+  padding-top: 120px; /* Desktop : espace pour header */
   flex-wrap: wrap;
   background-color: #f9f9f9;
 }
@@ -103,6 +103,11 @@
 
 /* Responsive Fun Fact */
 @media (max-width: 1024px) {
+  .homepage-layout-v2 {
+    flex-direction: column;
+    padding-top: 200px; /* Tablette : espace header plus grand */
+  }
+
   .homepage-fun-fact-v2 {
     top: auto;
     bottom: 20px;
@@ -115,6 +120,10 @@
 }
 
 @media (max-width: 768px) {
+  .homepage-layout-v2 {
+    padding-top: 220px; /* Mobile : espace header + recherche */
+  }
+
   .homepage-fun-fact-v2 {
     bottom: 10px;
     left: 50%;
@@ -149,18 +158,4 @@
   width: 40%;
   border-radius: 10px;
   object-fit: cover;
-}
-
-/* Responsive amélioré */
-@media (max-width: 1024px) {
-  .homepage-layout-v2 {
-    flex-direction: column;
-    padding-top: 200px; /* tablette : espace header plus petit */
-  }
-}
-
-@media (max-width: 500px) {
-  .homepage-layout-v2 {
-    padding-top: 220px; /* mobile : header plus petit */
-  }
 }
