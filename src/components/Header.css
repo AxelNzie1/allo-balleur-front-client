@@ -396,7 +396,7 @@ datalist {
   }
 
   .logo-img {
-    height: 62px; /* Taille réduite pour tablette */
+    height: 72px; /* Taille réduite pour tablette */
   }
 
   .user-menu-container {
@@ -485,11 +485,11 @@ datalist {
 
   .header-logo {
     font-size: 1.2rem;
-    min-width: 80px; /* Largeur minimale encore réduite */
+    min-width: 89px; /* Largeur minimale encore réduite */
   }
 
   .logo-img {
-    height: 28px; /* Taille encore plus petite pour mobile */
+    height: 38px; /* Taille encore plus petite pour mobile */
   }
 
   .search-tabs-wrapper {
