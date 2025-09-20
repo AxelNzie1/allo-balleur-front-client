@@ -150,7 +150,7 @@
 }
 
 .selected-pack-info {
-  background: #FFE9F5;
+  background: #FF0086;
   padding: 12px;
   border-radius: 8px;
   margin-bottom: 15px;
@@ -253,7 +253,7 @@
 .transaction-scroll {
   max-height: 400px;
   overflow-y: auto;
-  border: 1px solid #FFE9F5;
+  border: 1px solid #FF0086;
   border-radius: 10px;
   padding: 10px;
   background: #fafafa;
@@ -351,7 +351,7 @@
 }
 
 .update-btn, .kyc-upload-btn, .kyc-submit-btn {
-  background: #FFE9F5;
+  background: #FF0086;
   color: white;
   padding: 12px 20px;
   border: none;
