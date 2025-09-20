@@ -3,7 +3,7 @@
   display: flex;
   gap: 32px;
   padding: 24px;
-  padding-top: 120px; /* Desktop : espace pour header */
+  padding-top: 140px; /* Desktop : espace pour header */
   flex-wrap: wrap;
   background-color: #f9f9f9;
 }
@@ -161,6 +161,6 @@
 
 @media (max-width: 500px) {
   .homepage-layout-v2 {
-    padding-top: 80px; /* mobile : header plus petit */
+    padding-top: 120px; /* mobile : header plus petit */
   }
 }
