@@ -11,7 +11,7 @@
   border-right: 1px solid #eee;
   padding: 1rem;
   position: fixed;
-  top: 100px; /* 🔽 ajusté (header ≈80px + petit espace) */
+  top: 100px; /* header ≈80px + petit espace */
   left: 0;
   height: calc(100vh - 80px);
   overflow-y: auto;
@@ -78,7 +78,7 @@
   100% { transform: scale(1); }
 }
 
-/* Assurez-vous que les éléments de la sidebar ont un positionnement relatif */
+/* Sidebar items */
 .bailleur-dashboard__sidebar ul li {
   position: relative;
   padding: 12px 15px;
@@ -92,16 +92,21 @@
 
 /* --- RESPONSIVE : sidebar horizontale sur mobile --- */
 @media (max-width: 768px) {
+  body {
+    padding-top: 0 !important; /* supprime tout espace du header */
+  }
+
   .bailleur-dashboard__container {
     flex-direction: column;
-    margin-top: 0;         /* ✅ supprime l’espace supplémentaire */
+    margin-top: 0 !important; /* pas d’espace sous le header */
+    min-height: auto; /* adapte la hauteur à l’écran */
   }
 
   .bailleur-dashboard__sidebar {
     width: 100%;
     height: auto;
-    position: relative;    /* ✅ n’est plus fixe */
-    top: 0;                /* ✅ pas de décalage sous le header */
+    position: relative;
+    top: 0;
     left: 0;
     border-right: none;
     border-bottom: 1px solid #eee;
