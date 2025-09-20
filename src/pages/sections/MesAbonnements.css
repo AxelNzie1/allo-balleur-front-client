@@ -14,7 +14,11 @@
   padding: 2rem;
   font-family: 'Segoe UI', sans-serif;
   color: var(--text-color);
+  background-color: #fff0f6; /* rose très clair */
+  border-radius: 16px; /* coins légèrement arrondis */
+  box-shadow: 0 4px 20px rgba(0,0,0,0.05); /* léger relief */
 }
+
 
 .subscription-container h2, .subscription-container h3, .subscription-container h4 {
   color: var(--primary-color);
