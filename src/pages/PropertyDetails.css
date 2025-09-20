@@ -79,11 +79,25 @@
   padding: 0;
 }
 
+.pd-pro-badge {
+  display: inline-block;
+  background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+  color: white;
+  font-weight: bold;
+  font-size: 0.75rem;
+  padding: 4px 8px;
+  border-radius: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+
 .pd-carousel-image {
   width: 100%;
   aspect-ratio: 16 / 9;
   object-fit: cover; /* desktop par défaut */
-  border-radius: 20px;
+  border-radius: 5px;
   transition: transform 0.5s ease;
 }
 

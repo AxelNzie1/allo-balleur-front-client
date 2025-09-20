@@ -831,7 +831,7 @@ export default function PropertyDetail() {
                         className="pd-view-phone-btn" 
                         onClick={handleViewPhone}
                       >
-                        <FaPhone className="pd-phone-icon" /> Afficher le numéro
+                        <FaPhone className="pd-phone-icon" /> Afficher
                       </button>
                       {phoneError && <p className="pd-error-text">{phoneError}</p>}
                     </>
@@ -839,12 +839,17 @@ export default function PropertyDetail() {
                 </div>
               </div>
               <div className="pd-info-card">
-                <div className="pd-info-icon">🏢</div>
-                <div>
-                  <strong>Statut:</strong>
-                  <p>{property.owner?.is_pro ? "Professionnel" : "Particulier"}</p>
-                </div>
+              <div className="pd-info-icon">🏢</div>
+              <div>
+                <strong>Statut:</strong>
+                {property.owner?.is_pro ? (
+                  <span className="pd-pro-badge">Bailleur PRO</span>
+                ) : (
+                  <p>Particulier</p>
+                )}
               </div>
+            </div>
+
             </div>
 
             {/* BOUTON DE MESSAGERIE */}
