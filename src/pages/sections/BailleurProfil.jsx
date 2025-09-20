@@ -4,7 +4,6 @@ import "./BailleurProfil.css";
 
 const API = "https://allo-bailleur-backend-1.onrender.com";
 
-// Définition des packs de recharge
 const RECHARGE_PACKS = [
   { amount: 1000, tokens: 10, label: "10 tokens - 1 000 FCFA" },
   { amount: 2500, tokens: 30, label: "30 tokens - 2 500 FCFA" },
@@ -29,7 +28,13 @@ const BailleurProfil = () => {
   const [rechargeAmount, setRechargeAmount] = useState("");
   const [campayPhone, setCampayPhone] = useState("");
   const [selectedPack, setSelectedPack] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
+
+  // États “loading” pour chaque bouton
+  const [isLoadingProfile, setIsLoadingProfile] = useState(false);
+  const [isLoadingKycUpload, setIsLoadingKycUpload] = useState(false);
+  const [isLoadingKycSubmit, setIsLoadingKycSubmit] = useState(false);
+  const [isLoadingCampay, setIsLoadingCampay] = useState(false);
+  const [isLoadingPDF, setIsLoadingPDF] = useState(false);
 
   useEffect(() => {
     fetchProfile();
@@ -52,25 +57,6 @@ const BailleurProfil = () => {
       setUserRole(data.role || "client");
     } catch (err) {
       console.error("Erreur lors du chargement du profil", err);
-    }
-  };
-
-  const handleDownloadPDF = async () => {
-    try {
-      const res = await axios.get(`${API}/tokens/history/download-pdf`, {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-        responseType: "blob",
-      });
-      const blob = new Blob([res.data], { type: "application/pdf" });
-      const url = window.URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = "historique_transactions.pdf";
-      link.click();
-      window.URL.revokeObjectURL(url);
-    } catch (err) {
-      console.error("Erreur téléchargement PDF :", err);
-      alert("Erreur lors du téléchargement du PDF.");
     }
   };
 
@@ -108,13 +94,11 @@ const BailleurProfil = () => {
     }
   };
 
-  // Sélection d'un pack
   const handlePackSelect = (pack) => {
     setSelectedPack(pack);
     setRechargeAmount(pack.amount.toString());
   };
 
-  // Recharge via CamPay
   const handleRechargeCampay = async () => {
     const amount = parseInt(rechargeAmount);
     
@@ -128,39 +112,32 @@ const BailleurProfil = () => {
       return;
     }
 
-    setIsLoading(true);
+    setIsLoadingCampay(true);
     try {
       const response = await axios.post(
         `${API}/tokens/campay`,
-        { 
-          amount: amount, 
-          phone_number: campayPhone 
-        },
-        { 
-          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } 
-        }
+        { amount, phone_number: campayPhone },
+        { headers: { Authorization: `Bearer ${localStorage.getItem("token")}` } }
       );
 
       alert(`Demande de paiement envoyée ! Référence: ${response.data.campay_reference}`);
       setRechargeAmount("");
       setCampayPhone("");
       setSelectedPack(null);
-      
-      // Recharger les données après un délai
       setTimeout(() => {
         fetchTokenBalance();
         fetchTokenHistory();
       }, 3000);
-
     } catch (err) {
       console.error("Erreur CamPay :", err);
       alert(err.response?.data?.detail || "Erreur lors de la recharge CamPay.");
     } finally {
-      setIsLoading(false);
+      setIsLoadingCampay(false);
     }
   };
 
   const handleUpdateProfile = async () => {
+    setIsLoadingProfile(true);
     const formData = new FormData();
     formData.append("full_name", fullName);
     formData.append("email", email);
@@ -179,6 +156,8 @@ const BailleurProfil = () => {
     } catch (err) {
       console.error("Erreur mise à jour profil :", err);
       alert("Erreur lors de la mise à jour.");
+    } finally {
+      setIsLoadingProfile(false);
     }
   };
 
@@ -187,6 +166,8 @@ const BailleurProfil = () => {
       alert("Veuillez choisir les 3 fichiers requis.");
       return;
     }
+    setIsLoadingKycUpload(true);
+
     const formData = new FormData();
     formData.append("SELFIE", selfieFile);
     formData.append("id_card", idCardFile);
@@ -204,10 +185,13 @@ const BailleurProfil = () => {
     } catch (err) {
       console.error("Erreur upload KYC :", err);
       alert("Erreur lors de l'envoi des documents.");
+    } finally {
+      setIsLoadingKycUpload(false);
     }
   };
 
   const handleKycSubmit = async () => {
+    setIsLoadingKycSubmit(true);
     try {
       await axios.post(`${API}/users/kyc/submit`, null, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
@@ -217,6 +201,30 @@ const BailleurProfil = () => {
     } catch (err) {
       console.error("Erreur soumission KYC :", err);
       alert("Erreur lors de la soumission.");
+    } finally {
+      setIsLoadingKycSubmit(false);
+    }
+  };
+
+  const handleDownloadPDF = async () => {
+    setIsLoadingPDF(true);
+    try {
+      const res = await axios.get(`${API}/tokens/history/download-pdf`, {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        responseType: "blob",
+      });
+      const blob = new Blob([res.data], { type: "application/pdf" });
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "historique_transactions.pdf";
+      link.click();
+      window.URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error("Erreur téléchargement PDF :", err);
+      alert("Erreur lors du téléchargement du PDF.");
+    } finally {
+      setIsLoadingPDF(false);
     }
   };
 
@@ -242,7 +250,6 @@ const BailleurProfil = () => {
             <span className="token-balance">{tokenBalance} jetons</span>
           </h2>
 
-          {/* Packs de recharge */}
           <div className="recharge-packs">
             <h4>🎁 Packs de recharge</h4>
             <div className="packs-grid">
@@ -263,16 +270,13 @@ const BailleurProfil = () => {
             </div>
           </div>
 
-          {/* Recharge via CamPay */}
           <div className="campay-group">
             <h4>📱 Recharge via Mobile Money</h4>
-            
             {selectedPack && (
               <div className="selected-pack-info">
                 <strong>Pack sélectionné:</strong> {selectedPack.tokens} tokens - {selectedPack.amount.toLocaleString()} FCFA
               </div>
             )}
-            
             <div className="input-group">
               <label>Téléphone Mobile Money</label>
               <input
@@ -283,7 +287,6 @@ const BailleurProfil = () => {
                 className="recharge-input"
               />
             </div>
-            
             <div className="input-group">
               <label>Montant personnalisé (min 1000 FCFA)</label>
               <input
@@ -299,30 +302,26 @@ const BailleurProfil = () => {
                 step="100"
               />
             </div>
-            
-            <button 
-              className={`recharge-btn ${isLoading ? 'loading' : ''}`}
+            <button
+              className="recharge-btn"
               onClick={handleRechargeCampay}
-              disabled={!campayPhone || !rechargeAmount || isLoading || parseInt(rechargeAmount) < 1000}
+              disabled={!campayPhone || !rechargeAmount || isLoadingCampay || parseInt(rechargeAmount) < 1000}
             >
-              {isLoading ? '⏳ Traitement...' : 
-               selectedPack ? 
-                `📱 Payer ${selectedPack.amount.toLocaleString()} FCFA` : 
-                '📱 Recharger avec Mobile Money'}
+              {isLoadingCampay ? "⏳ Traitement..." :
+               selectedPack ? `📱 Payer ${selectedPack.amount.toLocaleString()} FCFA` :
+               "📱 Recharger avec Mobile Money"}
             </button>
-            
-            {rechargeAmount && !selectedPack && parseInt(rechargeAmount) >= 1000 && (
-              <div className="custom-amount-info">
-                ≈ {Math.floor(parseInt(rechargeAmount || 0) / 100)} tokens (sans bonus)
-              </div>
-            )}
           </div>
 
           <div className="transaction-section">
             <div className="transaction-header">
               <h3>📜 Historique des transactions</h3>
-              <button className="btn pdf-btn" onClick={handleDownloadPDF}>
-                📄 PDF
+              <button
+                className="btn pdf-btn"
+                onClick={handleDownloadPDF}
+                disabled={isLoadingPDF}
+              >
+                {isLoadingPDF ? "⏳ Téléchargement..." : "📄 PDF"}
               </button>
             </div>
             <div className="transaction-scroll">
@@ -332,15 +331,11 @@ const BailleurProfil = () => {
                 ) : (
                   transactionHistory.map((tx, idx) => (
                     <li key={idx} className={`transaction-item ${tx.type}`}>
-                      <div className="transaction-icon">
-                        {tx.type === "credit" ? "➕" : "➖"}
-                      </div>
+                      <div className="transaction-icon">{tx.type === "credit" ? "➕" : "➖"}</div>
                       <div className="transaction-details">
                         <div className="transaction-amount">{tx.amount} tokens</div>
                         <div className="transaction-description">{tx.description}</div>
-                        <div className="transaction-date">
-                          {new Date(tx.timestamp).toLocaleString()}
-                        </div>
+                        <div className="transaction-date">{new Date(tx.timestamp).toLocaleString()}</div>
                       </div>
                     </li>
                   ))
@@ -357,43 +352,26 @@ const BailleurProfil = () => {
           <h2>📝 Mise à jour du profil</h2>
           <div className="input-group">
             <label>Nom complet</label>
-            <input 
-              value={fullName} 
-              onChange={(e) => setFullName(e.target.value)} 
-              placeholder="Votre nom complet"
-              className="profile-input"
-            />
+            <input value={fullName} onChange={(e) => setFullName(e.target.value)} className="profile-input" />
           </div>
           <div className="input-group">
             <label>Email</label>
-            <input 
-              value={email} 
-              onChange={(e) => setEmail(e.target.value)} 
-              placeholder="Votre email"
-              className="profile-input"
-              type="email"
-            />
+            <input value={email} onChange={(e) => setEmail(e.target.value)} className="profile-input" type="email" />
           </div>
           <div className="input-group">
             <label>Téléphone</label>
-            <input 
-              value={phone} 
-              onChange={(e) => setPhone(e.target.value)} 
-              placeholder="Votre téléphone"
-              className="profile-input"
-            />
+            <input value={phone} onChange={(e) => setPhone(e.target.value)} className="profile-input" />
           </div>
           <div className="input-group">
             <label>Photo de profil</label>
-            <input 
-              type="file" 
-              accept="image/*" 
-              onChange={(e) => setProfileImage(e.target.files[0])}
-              className="file-input"
-            />
+            <input type="file" accept="image/*" onChange={(e) => setProfileImage(e.target.files[0])} className="file-input" />
           </div>
-          <button onClick={handleUpdateProfile} className="update-btn">
-            Mettre à jour le profil
+          <button
+            onClick={handleUpdateProfile}
+            className="update-btn"
+            disabled={isLoadingProfile}
+          >
+            {isLoadingProfile ? "⏳ Mise à jour en cours..." : "Mettre à jour le profil"}
           </button>
         </div>
 
@@ -403,53 +381,42 @@ const BailleurProfil = () => {
             <hr className="section-divider" />
             <div className="kyc-section">
               <h2>📤 Vérification KYC</h2>
-              <p className="kyc-info">
-                Pour devenir bailleur vérifié, veuillez uploader les documents suivants :
-              </p>
+              <p className="kyc-info">Pour devenir bailleur vérifié, veuillez uploader les documents suivants :</p>
               
               <div className="kyc-docs">
                 <div className="kyc-doc">
                   <label>📸 Selfie avec pièce d'identité</label>
-                  <input 
-                    type="file" 
-                    accept="image/*" 
-                    onChange={(e) => setSelfieFile(e.target.files[0])}
-                    className="file-input"
-                  />
+                  <input type="file" accept="image/*" onChange={(e) => setSelfieFile(e.target.files[0])} className="file-input" />
                 </div>
-                
                 <div className="kyc-doc">
                   <label>🪪 Pièce d'identité (recto-verso)</label>
-                  <input 
-                    type="file" 
-                    accept="image/*" 
-                    onChange={(e) => setIdCardFile(e.target.files[0])}
-                    className="file-input"
-                  />
+                  <input type="file" accept="image/*" onChange={(e) => setIdCardFile(e.target.files[0])} className="file-input" />
                 </div>
-                
                 <div className="kyc-doc">
                   <label>🏠 Justificatif de domicile</label>
-                  <input 
-                    type="file" 
-                    accept="image/*,.pdf" 
-                    onChange={(e) => setOwnershipFile(e.target.files[0])}
-                    className="file-input"
-                  />
+                  <input type="file" accept="image/*,.pdf" onChange={(e) => setOwnershipFile(e.target.files[0])} className="file-input" />
                 </div>
               </div>
-              
-              <button onClick={handleMultipleKycUpload} className="kyc-upload-btn">
-                📤 Uploader les documents
+
+              <button
+                onClick={handleMultipleKycUpload}
+                className="kyc-upload-btn"
+                disabled={isLoadingKycUpload}
+              >
+                {isLoadingKycUpload ? "⏳ Soumission en cours..." : "📤 Uploader les documents"}
               </button>
-              
+
               <div className="kyc-status-container">
                 <strong>Statut KYC :</strong> {renderKycStatus()}
               </div>
-              
+
               {!isVerified && kycStatus === "approved" && (
-                <button onClick={handleKycSubmit} className="kyc-submit-btn">
-                  ✅ Soumettre le dossier KYC
+                <button
+                  onClick={handleKycSubmit}
+                  className="kyc-submit-btn"
+                  disabled={isLoadingKycSubmit}
+                >
+                  {isLoadingKycSubmit ? "⏳ Soumission en cours..." : "✅ Soumettre le dossier KYC"}
                 </button>
               )}
             </div>
