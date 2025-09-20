@@ -949,7 +949,7 @@
   }
   
   .pd-carousel-image {
-    height: 450px;
+    height: 550px;
   }
   
   .pd-thumbnail {
@@ -996,7 +996,7 @@
 /* Small phones */
 @media (max-width: 480px) {
   .pd-carousel-image {
-    height: 200px;
+    height: 450px;
   }
   
   .pd-header h1 {
@@ -1055,7 +1055,7 @@
 /* Very small phones */
 @media (max-width: 360px) {
   .pd-carousel-image {
-    height: 180px;
+    height: 380px;
   }
   
   .pd-header h1 {
