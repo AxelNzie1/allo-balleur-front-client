@@ -1,17 +1,17 @@
 .bailleur-dashboard__container {
   display: flex;
-  margin-top: 20px; /* pour s’aligner sous un header fixe */
+  margin-top: 20px; /* espace sous le header fixe (desktop) */
   min-height: calc(90vh - 80px);
 }
 
-/* SIDEBAR FIXE À GAUCHE */
+/* --- SIDEBAR FIXE À GAUCHE (desktop) --- */
 .bailleur-dashboard__sidebar {
   width: 240px;
   background-color: #fff;
   border-right: 1px solid #eee;
   padding: 1rem;
   position: fixed;
-  top: 140px;
+  top: 100px; /* 🔽 ajusté (header ≈80px + petit espace) */
   left: 0;
   height: calc(100vh - 80px);
   overflow-y: auto;
@@ -19,7 +19,7 @@
   z-index: 100;
 }
 
-/* CONTENU PRINCIPAL DÉCALÉ POUR NE PAS PASSER SOUS LA SIDEBAR */
+/* --- CONTENU PRINCIPAL --- */
 .bailleur-dashboard__main {
   margin-left: 240px; /* même largeur que la sidebar */
   flex-grow: 1;
@@ -28,7 +28,7 @@
   width: calc(100% - 240px);
 }
 
-/* LISTE DANS LA SIDEBAR */
+/* --- LISTE DANS LA SIDEBAR --- */
 .bailleur-dashboard__sidebar ul {
   list-style: none;
   padding: 0;
@@ -48,7 +48,7 @@
   background-color: #e6f0ff;
 }
 
-/* Styles pour le badge de messages non lus */
+/* --- Badge de messages non lus --- */
 .messagerie-item {
   position: relative;
   display: flex;
@@ -73,15 +73,9 @@
 }
 
 @keyframes pulse {
-  0% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.1);
-  }
-  100% {
-    transform: scale(1);
-  }
+  0%   { transform: scale(1); }
+  50%  { transform: scale(1.1); }
+  100% { transform: scale(1); }
 }
 
 /* Assurez-vous que les éléments de la sidebar ont un positionnement relatif */
@@ -96,22 +90,24 @@
   background-color: #f0f0f0;
 }
 
-/* RESPONSIVE : sidebar devient horizontale sur mobile */
+/* --- RESPONSIVE : sidebar horizontale sur mobile --- */
 @media (max-width: 768px) {
   .bailleur-dashboard__container {
     flex-direction: column;
+    margin-top: 0;         /* ✅ supprime l’espace supplémentaire */
   }
 
   .bailleur-dashboard__sidebar {
     width: 100%;
     height: auto;
-    position: relative;
-    top: 0;
+    position: relative;    /* ✅ n’est plus fixe */
+    top: 0;                /* ✅ pas de décalage sous le header */
     left: 0;
     border-right: none;
     border-bottom: 1px solid #eee;
     overflow-x: auto;
     z-index: auto;
+    padding-top: 0;
   }
 
   .bailleur-dashboard__sidebar ul {
@@ -133,6 +129,7 @@
     padding: 1rem;
   }
 }
+
 .section-wrapper {
   position: relative;
 }
