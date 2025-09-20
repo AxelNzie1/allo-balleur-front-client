@@ -2,8 +2,8 @@ import { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import UserMenu from "../components/UserMenu";
-import "../components/Header.css";
 import logo from "../assets/logo.svg";
+import "./Header.css";
 
 const HOUSE_KEYWORDS = [
   "studio", "appartement", "villa", "boutique","piscine", "jardin", "terrasse", "garage", 
@@ -23,7 +23,6 @@ export default function Header() {
   const [user, setUser] = useState(null);
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
-  const [activeTab, setActiveTab] = useState("logements");
   const [searchParams, setSearchParams] = useState({
     query: "",
     city: "",
@@ -36,8 +35,8 @@ export default function Header() {
   const [loginError, setLoginError] = useState("");
   const [searchError, setSearchError] = useState("");
   const [isLoadingFilters, setIsLoadingFilters] = useState(false);
-  const [showErrorToast, setShowErrorToast] = useState(false);
-  const [isLoggingIn, setIsLoggingIn] = useState(false); // Nouvel état pour le loading
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
+  const [showFilters, setShowFilters] = useState(false);
 
   // 🔹 Charger filtres & utilisateur
   useEffect(() => {
@@ -68,7 +67,6 @@ export default function Header() {
           setUser(res.data);
           setIsLoggedIn(true);
         } catch (err) {
-          console.error("Erreur profil", err);
           localStorage.removeItem("token");
           setIsLoggedIn(false);
         }
@@ -78,19 +76,6 @@ export default function Header() {
     fetchFilters();
     fetchUser();
   }, []);
-
-  // 🔹 Toast erreur
-  useEffect(() => {
-    if (loginError || searchError) {
-      setShowErrorToast(true);
-      const timer = setTimeout(() => {
-        setShowErrorToast(false);
-        setLoginError("");
-        setSearchError("");
-      }, 5000);
-      return () => clearTimeout(timer);
-    }
-  }, [loginError, searchError]);
 
   // 🔹 Fermer dropdown clic extérieur
   useEffect(() => {
@@ -124,7 +109,7 @@ export default function Header() {
 
   // 🔹 Connexion
   const handleLogin = async () => {
-    setIsLoggingIn(true); // Début du loading
+    setIsLoggingIn(true);
     setLoginError("");
     
     try {
@@ -138,121 +123,81 @@ export default function Header() {
       setUser(me.data);
       setShowDropdown(false);
     } catch (err) {
-      setLoginError(
-        err.response?.status === 401 ? "Identifiants incorrects" : "Erreur de connexion"
-      );
+      setLoginError(err.response?.status === 401 ? "Identifiants incorrects" : "Erreur de connexion");
     } finally {
-      setIsLoggingIn(false); // Fin du loading
+      setIsLoggingIn(false);
     }
   };
 
   return (
     <header className="airbnb-header header">
-      {showErrorToast && (
-        <div className="error-toast">{loginError || searchError}</div>
-      )}
-
-      {/* ✅ Logo SVG responsive */}
+      {/* Logo */}
       <Link to="/" className="header-logo">
         <img src={logo} alt="Allo Bailleur Logo" className="logo-img" />
       </Link>
 
-      {/* Barre de recherche */}
-      <div className="search-tabs-container">
-        <div className="search-tabs-wrapper">
-          <button
-            className={`search-tab ${activeTab === "logements" ? "active" : ""}`}
-            onClick={() => setActiveTab("logements")}
-          >
-            Logements
-          </button>
-          <button
-            className={`search-tab ${activeTab === "experiences" ? "active" : ""}`}
-            onClick={() => setActiveTab("experiences")}
-          >
-            Expériences
-          </button>
-        </div>
+      {/* Barre de recherche minimaliste */}
+      <div className="search-bar-compact">
+        <input
+          className="main-query"
+          name="query"
+          type="text"
+          placeholder="Piscine, villa, jardin…"
+          value={searchParams.query}
+          onChange={handleChange}
+          onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+          list="keywords-list"
+        />
+        <datalist id="keywords-list">
+          {HOUSE_KEYWORDS.map(k => <option key={k} value={k} />)}
+        </datalist>
 
-        <div className="search-bar-container">
-          <div className="search-input-group">
-            <div className="search-input-wrapper">
-              <label>Que recherchez-vous ?</label>
-              <input
-                name="query"
-                type="text"
-                placeholder="Piscine, jardin, parking..."
-                value={searchParams.query}
-                onChange={handleChange}
-                list="keywords-list"
-              />
-              <datalist id="keywords-list">
-                {HOUSE_KEYWORDS.map(k => <option key={k} value={k} />)}
-              </datalist>
-            </div>
+        <button type="button" className="toggle-filters" onClick={() => setShowFilters(prev => !prev)}>
+          Filtres ⌄
+        </button>
 
-            <div className="search-divider" />
-
-            <div className="search-input-wrapper">
-              <label>Ville</label>
-              <input
-                name="city"
-                list="cities-list"
-                type="text"
-                placeholder="Ex: Douala"
-                value={searchParams.city}
-                onChange={handleChange}
-              />
-              <datalist id="cities-list">
-                {cities.map(c => <option key={c} value={c} />)}
-              </datalist>
-            </div>
-
-            <div className="search-divider" />
-
-            <div className="search-input-wrapper">
-              <label>Budget max (FCFA)</label>
-              <input
-                name="price"
-                type="number"
-                placeholder={`Jusqu'à ${priceRange.max.toLocaleString()}`}
-                min={priceRange.min}
-                max={priceRange.max}
-                value={searchParams.price}
-                onChange={handleChange}
-              />
-            </div>
-
-            <div className="search-divider" />
-
-            <div className="search-input-wrapper">
-              <label>Quartier</label>
-              <input
-                name="quartier"
-                list="quartiers-list"
-                type="text"
-                placeholder="Ex: Bonapriso"
-                value={searchParams.quartier}
-                onChange={handleChange}
-              />
-              <datalist id="quartiers-list">
-                {quartiers.map(q => <option key={q} value={q} />)}
-              </datalist>
-            </div>
-          </div>
-
-          <button 
-            className="search-button" 
-            onClick={handleSearch}
-            aria-label="Rechercher"
-            disabled={isLoadingFilters}
-          >
-            🔍
-          </button>
-        </div>
+        <button className="search-btn-min" onClick={handleSearch} aria-label="Rechercher">
+          🔍
+        </button>
       </div>
 
-      {/* User menu / connexion */}
+      {showFilters && (
+        <div className="filters-panel">
+          <input
+            name="city"
+            list="cities-list"
+            placeholder="Ville"
+            value={searchParams.city}
+            onChange={handleChange}
+          />
+          <datalist id="cities-list">
+            {cities.map(c => <option key={c} value={c} />)}
+          </datalist>
+
+          <input
+            name="quartier"
+            list="quartiers-list"
+            placeholder="Quartier"
+            value={searchParams.quartier}
+            onChange={handleChange}
+          />
+          <datalist id="quartiers-list">
+            {quartiers.map(q => <option key={q} value={q} />)}
+          </datalist>
+
+          <input
+            name="price"
+            type="number"
+            placeholder={`Budget max (${priceRange.max.toLocaleString()} FCFA)`}
+            min={priceRange.min}
+            max={priceRange.max}
+            value={searchParams.price}
+            onChange={handleChange}
+          />
+        </div>
+      )}
+
+      {/* Menu utilisateur */}
       <div className="user-menu-container" ref={dropdownRef}>
         {isLoggedIn && user ? (
           <UserMenu 
@@ -293,16 +238,9 @@ export default function Header() {
                 <button 
                   onClick={handleLogin} 
                   className="login-submit-button"
-                  disabled={isLoggingIn} // Désactiver pendant le loading
+                  disabled={isLoggingIn}
                 >
-                  {isLoggingIn ? (
-                    <>
-                      <span className="login-spinner"></span>
-                      Connexion...
-                    </>
-                  ) : (
-                    "Se connecter"
-                  )}
+                  {isLoggingIn ? <span className="login-spinner"></span> : "Se connecter"}
                 </button>
                 <div className="register-prompt">
                   Pas de compte ?{" "}
