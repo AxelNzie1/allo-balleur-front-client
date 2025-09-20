@@ -1,9 +1,10 @@
 import { useState, useEffect, useRef } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import UserMenu from "../components/UserMenu";
 import "../components/Header.css";
 import logo from "../assets/logo.svg";
+import { useIsMobile } from "../hooks/useIsMobile"; // Hook pour détecter mobile
 
 const HOUSE_KEYWORDS = [
   "studio", "appartement", "villa", "boutique","piscine", "jardin", "terrasse", "garage", 
@@ -17,6 +18,11 @@ const HOUSE_KEYWORDS = [
 export default function Header() {
   const navigate = useNavigate();
   const dropdownRef = useRef(null);
+  const location = useLocation();
+  const isMobile = useIsMobile();
+
+  // ✅ Header caché sur mobile si on est sur une route dashboard
+  const hiddenOnMobile = isMobile && location.pathname.startsWith("/dashboard");
 
   const [showDropdown, setShowDropdown] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem("token"));
@@ -24,12 +30,7 @@ export default function Header() {
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
   const [activeTab, setActiveTab] = useState("logements");
-  const [searchParams, setSearchParams] = useState({
-    query: "",
-    city: "",
-    price: "",
-    quartier: ""
-  });
+  const [searchParams, setSearchParams] = useState({ query: "", city: "", price: "", quartier: "" });
   const [quartiers, setQuartiers] = useState([]);
   const [cities, setCities] = useState([]);
   const [priceRange, setPriceRange] = useState({ min: 0, max: 1000000 });
@@ -37,7 +38,7 @@ export default function Header() {
   const [searchError, setSearchError] = useState("");
   const [isLoadingFilters, setIsLoadingFilters] = useState(false);
   const [showErrorToast, setShowErrorToast] = useState(false);
-  const [isLoggingIn, setIsLoggingIn] = useState(false); // Nouvel état pour le loading
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
 
   // 🔹 Charger filtres & utilisateur
   useEffect(() => {
@@ -124,7 +125,7 @@ export default function Header() {
 
   // 🔹 Connexion
   const handleLogin = async () => {
-    setIsLoggingIn(true); // Début du loading
+    setIsLoggingIn(true);
     setLoginError("");
     
     try {
@@ -138,26 +139,20 @@ export default function Header() {
       setUser(me.data);
       setShowDropdown(false);
     } catch (err) {
-      setLoginError(
-        err.response?.status === 401 ? "Identifiants incorrects" : "Erreur de connexion"
-      );
+      setLoginError(err.response?.status === 401 ? "Identifiants incorrects" : "Erreur de connexion");
     } finally {
-      setIsLoggingIn(false); // Fin du loading
+      setIsLoggingIn(false);
     }
   };
 
   return (
-    <header className="airbnb-header header">
-      {showErrorToast && (
-        <div className="error-toast">{loginError || searchError}</div>
-      )}
+    <header className={`airbnb-header header ${hiddenOnMobile ? "hidden-mobile" : ""}`}>
+      {showErrorToast && <div className="error-toast">{loginError || searchError}</div>}
 
-      {/* ✅ Logo SVG responsive */}
       <Link to="/" className="header-logo">
         <img src={logo} alt="Allo Bailleur Logo" className="logo-img" />
       </Link>
 
-      {/* Barre de recherche */}
       <div className="search-tabs-container">
         <div className="search-tabs-wrapper">
           <button
@@ -190,9 +185,7 @@ export default function Header() {
                 {HOUSE_KEYWORDS.map(k => <option key={k} value={k} />)}
               </datalist>
             </div>
-
             <div className="search-divider" />
-
             <div className="search-input-wrapper">
               <label>Ville</label>
               <input
@@ -207,9 +200,7 @@ export default function Header() {
                 {cities.map(c => <option key={c} value={c} />)}
               </datalist>
             </div>
-
             <div className="search-divider" />
-
             <div className="search-input-wrapper">
               <label>Budget max (FCFA)</label>
               <input
@@ -222,9 +213,7 @@ export default function Header() {
                 onChange={handleChange}
               />
             </div>
-
             <div className="search-divider" />
-
             <div className="search-input-wrapper">
               <label>Quartier</label>
               <input
@@ -252,7 +241,6 @@ export default function Header() {
         </div>
       </div>
 
-      {/* User menu / connexion */}
       <div className="user-menu-container" ref={dropdownRef}>
         {isLoggedIn && user ? (
           <UserMenu 
@@ -293,7 +281,7 @@ export default function Header() {
                 <button 
                   onClick={handleLogin} 
                   className="login-submit-button"
-                  disabled={isLoggingIn} // Désactiver pendant le loading
+                  disabled={isLoggingIn}
                 >
                   {isLoggingIn ? (
                     <>

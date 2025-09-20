@@ -504,4 +504,14 @@ datalist {
   }
 }
 
+.header.hidden-mobile {
+  display: block; /* affiché par défaut */
+}
+
+@media (max-width: 768px) {
+  .header.hidden-mobile {
+    display: none;
+  }
+}
+
 

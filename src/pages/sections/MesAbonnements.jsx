@@ -198,8 +198,8 @@ const Abonnements = () => {
                   <div className="feature-item">
                     <span className="feature-icon">🤖</span>
                     <div className="feature-text">
-                      <strong>Descriptions automatiques</strong>
-                      <p>Génération IA de descriptions attractives pour vos annonces</p>
+                      <strong>Obtenez les numéros de vos prospects </strong>
+                      <p>Pour les actions marketing, vous avez une liste de numéros des clients intéressés par vos maisons</p>
                     </div>
                   </div>
                   
@@ -214,15 +214,15 @@ const Abonnements = () => {
                   <div className="feature-item">
                     <span className="feature-icon">📷</span>
                     <div className="feature-text">
-                      <strong>Galerie illimitée</strong>
-                      <p>Ajoutez jusqu'à 20 photos par annonce</p>
+                      <strong>Repondez aux messages laissés de vos clients</strong>
+                      <p>à defaut d'etre directement joignable, vos clients peuvent vous ecrires via la messagerie de l'application</p>
                     </div>
                   </div>
                   
                   <div className="feature-item">
                     <span className="feature-icon">⭐</span>
                     <div className="feature-text">
-                      <strong>Badge vérifié</strong>
+                      <strong>Badge de bailleur Professionnel</strong>
                       <p>Gagnez la confiance des locataires avec un profil certifié</p>
                     </div>
                   </div>
@@ -261,16 +261,16 @@ const Abonnements = () => {
                   <div className="feature-item">
                     <span className="feature-icon">🔔</span>
                     <div className="feature-text">
-                      <strong>Alertes instantanées</strong>
-                      <p>Notifications en temps réel pour vos critères de recherche</p>
+                      <strong>Chatez avec votre bailleur à volonté</strong>
+                      <p>La messagerie de l'application vous permet de discuter avec votre bailleur</p>
                     </div>
                   </div>
                   
                   <div className="feature-item">
                     <span className="feature-icon">💬</span>
                     <div className="feature-text">
-                      <strong>Messagerie prioritaire</strong>
-                      <p>Vos messages sont traités en priorité par les bailleurs</p>
+                      <strong>Assistance prioritaire</strong>
+                      <p>Vos reclammations sont traités en priorité par les bailleurs</p>
                     </div>
                   </div>
                   
@@ -278,7 +278,7 @@ const Abonnements = () => {
                     <span className="feature-icon">📋</span>
                     <div className="feature-text">
                       <strong>Réservations exclusives</strong>
-                      <p>Option de réservation prioritaire sur les biens convoités</p>
+                      <p>Vous avez la possibilité de reserver une maison si vous n'êtes pas pret tout de suite</p>
                     </div>
                   </div>
                   
@@ -341,9 +341,9 @@ const Abonnements = () => {
             <h4>🎁 Avantages inclus:</h4>
             <ul>
               <li>✅ Annonces en tête de liste</li>
-              <li>✅ Descriptions automatiques par IA</li>
+              <li>✅ Obtenez les numéros de téléphones des clients intéressé par votre maison</li>
               <li>✅ Statistiques détaillées de performance</li>
-              <li>✅ Badge de profil vérifié</li>
+              <li>✅ Badge de profil "Pro" </li>
               <li>✅ Support technique prioritaire</li>
               <li>✅ Analytics avancés</li>
               <li>✅ Mise en avant permanente</li>
@@ -403,11 +403,10 @@ const Abonnements = () => {
             <ul>
               <li>✅ Accès 24h avant tout le monde</li>
               <li>✅ Alertes instantanées personnalisées</li>
-              <li>✅ Obtention de mauratoir auprès bailleurs</li>
               <li>✅ Réservation exclusive des biens</li>
               <li>✅ Offres promotionnelles spéciales</li>
-              <li>✅ Conseiller personnel dédié</li>
-              <li>✅ Support client VIP</li>
+              <li>✅ Conseils et accompagnement technique dédié</li>
+              <li>✅ Support client prioritaire</li>
               <li>✅ Tableau de bord détaillé de vos activités.</li>
             </ul>
           </div>

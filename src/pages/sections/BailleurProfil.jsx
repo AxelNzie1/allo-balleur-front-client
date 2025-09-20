@@ -302,7 +302,7 @@ const BailleurProfil = () => {
               onClick={handleRechargeCampay}
               disabled={!campayPhone || !rechargeAmount || isLoadingCampay || parseInt(rechargeAmount) < 1000}
             >
-              {isLoadingCampay ? "⏳ Traitement..." : selectedPack ? `📱 Payer ${selectedPack.amount.toLocaleString()} FCFA` : "📱 Recharger avec Mobile Money"}
+              {isLoadingCampay ? "Traitement..." : selectedPack ? ` Payer ${selectedPack.amount.toLocaleString()} FCFA` : "Recharger avec Mobile Money"}
             </button>
           </div>
 

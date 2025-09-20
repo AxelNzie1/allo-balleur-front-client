@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './Preferences.css';
 
-const API_BASE_URL = "https://allo-bailleur-backend-1.onrender.com-backend-1.onrender.com";
+const API_BASE_URL = "https://allo-bailleur-backend-1.onrender.com";
 
 const MesPreferences = () => {
   const [likedProperties, setLikedProperties] = useState([]);
