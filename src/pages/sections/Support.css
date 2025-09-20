@@ -141,6 +141,8 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
+  min-height: 0; /* important pour mobile */
+  word-break: break-word; /* casse les mots trop longs */
 }
 .message { display: flex; margin-bottom: 10px; }
 .message.user { justify-content: flex-end; }
@@ -180,6 +182,7 @@
   display: flex;
   gap: 10px;
   align-items: flex-end;
+  flex-wrap: nowrap;
   background: #fff;
 }
 .chat-input textarea {
@@ -193,6 +196,7 @@
   font-family: inherit;
   outline: none;
   transition: border-color 0.2s ease;
+  min-width: 0; /* évite overflow sur mobile */
 }
 .chat-input textarea:focus { border-color: #667eea; }
 
@@ -207,6 +211,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
   transition: all 0.2s ease;
 }
 .send-btn:hover:not(:disabled) { transform: scale(1.1); }
@@ -228,49 +233,45 @@
 @media (max-width: 480px) {
   .chat-widget.open {
     width: 100vw;
-    height: 100vh;
+    height: calc(100vh - 20px); /* laisse un petit espace pour le header */
     bottom: 0;
     right: 0;
     border-radius: 0;
   }
 
-  /* En-tête */
   .chat-header h3 {
     font-size: 1rem;
     margin-right: 10px; /* éviter que le bouton dépasse */
   }
 
-  /* Messages */
   .chat-messages {
     padding: 10px;
-    box-sizing: border-box;
-    overflow-y: auto;
-    word-break: break-word; /* force le retour à la ligne */
+    flex: 1 1 auto;
+    min-height: 0;
+    word-break: break-word;
   }
 
   .message-content {
-    max-width: 90%; /* augmenter pour mobile */
+    max-width: 90%;
     font-size: 0.9rem;
-    word-break: break-word; /* casse les mots trop longs */
+    word-break: break-word;
   }
 
-  /* Champ de saisie */
   .chat-input {
     padding: 10px;
-    flex-wrap: wrap; /* pour éviter débordement du bouton */
+    flex-wrap: wrap;
     gap: 8px;
   }
 
   .chat-input textarea {
-    flex: 1 1 auto; /* prend toute la place disponible */
-    min-width: 0; /* important pour éviter overflow */
+    flex: 1 1 auto;
+    min-width: 0;
   }
 
   .send-btn {
-    flex-shrink: 0; /* ne rétrécit pas */
+    flex-shrink: 0;
   }
 
-  /* Bouton toggle */
   .chat-toggle-btn {
     padding: 10px 16px;
     font-size: 0.9rem;
