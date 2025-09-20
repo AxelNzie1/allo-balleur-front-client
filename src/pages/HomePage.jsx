@@ -101,7 +101,6 @@ export default function HomePage() {
 
         const [feedRes, adsRes] = await Promise.all([
           axios.get("https://allo-bailleur-backend-1.onrender.com/properties/feed", { headers }),
-
           axios.get("https://allo-bailleur-backend-1.onrender.com/ads/"),
         ]);
 
@@ -134,7 +133,6 @@ export default function HomePage() {
       }, 5000);
       return () => clearInterval(interval);
     }
-    console.log("Données publicités (ads):", ads);
   }, [ads]);
 
   return (

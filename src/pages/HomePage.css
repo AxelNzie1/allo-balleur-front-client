@@ -1,28 +1,27 @@
-/* Layout général - préfixé pour HomePage */
-.homepage-layout-v2 {
+/* Layout général */
+.homepage-layout {
   display: flex;
   gap: 32px;
   padding: 24px;
-  padding-top: 120px; /* Desktop : espace pour header */
-  flex-wrap: wrap;
+  flex-wrap: wrap; /* Permet aux éléments de passer à la ligne sur petit écran */
   background-color: #f9f9f9;
 }
 
 /* Contenu principal */
-.homepage-main-v2 {
+.main-content {
   flex: 1;
   min-width: 0;
 }
 
 /* Grille de propriétés */
-.homepage-properties-grid-v2 {
+.properties-grid {
   display: grid;
   gap: 10px;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Grille responsive */
 }
 
 /* Carte de propriété */
-.homepage-property-card-v2 {
+.property-card {
   background-color: #fff;
   border-radius: 16px;
   overflow: hidden;
@@ -32,50 +31,50 @@
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.homepage-property-card-v2:hover {
+.property-card:hover {
   transform: translateY(-5px);
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
 }
 
-.homepage-property-card-v2 img {
+.property-card img {
   width: 100%;
-  aspect-ratio: 4/3;
+  aspect-ratio: 4/3; /* Image uniforme */
   object-fit: cover;
 }
 
-.homepage-property-card-content-v2 {
+.property-card-content {
   padding: 16px;
   display: flex;
   flex-direction: column;
   gap: 8px;
 }
 
-.homepage-property-title-v2 {
+.property-title {
   font-weight: 600;
   font-size: 1rem;
   color: #111827;
 }
 
-.homepage-property-location-v2 {
+.property-location {
   font-size: 0.875rem;
   color: #6b7280;
 }
 
-.homepage-property-price-v2 {
+.property-price {
   font-weight: 700;
-  color: #e11d48;
+  color: #e11d48; /* rose foncé */
   font-size: 1.05rem;
 }
 
-.homepage-property-size-v2 {
+.property-size {
   font-size: 0.875rem;
   color: #374151;
 }
 
 /* Fun fact flottant */
-.homepage-fun-fact-v2 {
+.fun-fact-floating {
   position: fixed;
-  top: 240px; /* Desktop : ajusté selon header */
+  top: 320px; /* juste sous ton header */
   left: 85%;
   transform: translateX(-30%);
   background: #f406b1;
@@ -89,26 +88,21 @@
   align-items: center;
   gap: 8px;
   z-index: 1000;
-  animation: homepage-floating 3s ease-in-out infinite;
+  animation: floating 3s ease-in-out infinite;
 }
 
-.homepage-fun-fact-icon-v2 {
-  color: #ee4b5e;
-}
-
-@keyframes homepage-floating {
+@keyframes floating {
   0%, 100% { transform: translate(-50%, 0); }
   50% { transform: translate(-50%, -8px); }
 }
 
+.fun-fact-icon {
+  color: #ee4b5e; /* rouge/rose */
+}
+
 /* Responsive Fun Fact */
 @media (max-width: 1024px) {
-  .homepage-layout-v2 {
-    flex-direction: column;
-    padding-top: 200px; /* Tablette : espace header plus grand */
-  }
-
-  .homepage-fun-fact-v2 {
+  .fun-fact-floating {
     top: auto;
     bottom: 20px;
     right: 10px;
@@ -120,13 +114,9 @@
 }
 
 @media (max-width: 768px) {
-  .homepage-layout-v2 {
-    padding-top: 220px; /* Mobile : espace header + recherche */
-  }
-
-  .homepage-fun-fact-v2 {
+  .fun-fact-floating {
     bottom: 10px;
-    left: 50%;
+    left: 25%;
     transform: translateX(-50%);
     width: 40%;
     max-width: 380px;
@@ -136,26 +126,40 @@
 }
 
 /* Loader */
-.homepage-loader-wrapper-v2 {
+.loader-wrapper {
   display: flex;
   justify-content: center;
   padding: 40px 0;
 }
 
 /* Message d'erreur */
-.homepage-error-message-v2 {
+.error-message {
   color: #ef4444;
   margin-bottom: 16px;
   font-weight: 500;
 }
 
 /* Bannière publicitaire */
-.homepage-ads-banner-v2 {
+.ads-banner {
   margin-bottom: 28px;
 }
 
-.homepage-ads-image-v2 {
+.ads-image {
   width: 40%;
   border-radius: 10px;
   object-fit: cover;
+}
+
+/* Responsive amélioré */
+@media (max-width: 1024px) {
+  .homepage-layout {
+    flex-direction: column;
+  }
+  
+  .sidebar {
+    width: 100%;
+    position: relative;
+    top: 0;
+    margin-bottom: 24px;
+  }
 }
