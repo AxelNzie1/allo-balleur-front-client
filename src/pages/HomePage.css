@@ -75,7 +75,7 @@
 /* Fun fact flottant */
 .homepage-fun-fact-v2 {
   position: fixed;
-  top: 140px; /* Desktop : ajusté selon header */
+  top: 240px; /* Desktop : ajusté selon header */
   left: 85%;
   transform: translateX(-30%);
   background: #f406b1;
@@ -155,7 +155,7 @@
 @media (max-width: 1024px) {
   .homepage-layout-v2 {
     flex-direction: column;
-    padding-top: 100px; /* tablette : espace header plus petit */
+    padding-top: 200px; /* tablette : espace header plus petit */
   }
 }
 
