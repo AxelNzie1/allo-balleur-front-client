@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import { Loader, Lightbulb } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -15,6 +15,23 @@ export default function HomePage() {
   const [funFact, setFunFact] = useState("");
   const [trackingLoading, setTrackingLoading] = useState(false);
   const [showPopupWarning, setShowPopupWarning] = useState(false);
+
+  // 🔹 Ref layout pour padding dynamique
+  const layoutRef = useRef(null);
+  const [headerHeight, setHeaderHeight] = useState(0);
+
+  useEffect(() => {
+    const updatePadding = () => {
+      const headerEl = document.querySelector(".airbnb-header");
+      if (headerEl && layoutRef.current) {
+        const height = headerEl.getBoundingClientRect().height;
+        setHeaderHeight(height + 20); // 20px d'espace supplémentaire
+      }
+    };
+    updatePadding();
+    window.addEventListener("resize", updatePadding);
+    return () => window.removeEventListener("resize", updatePadding);
+  }, []);
 
   const funFactsList = [
     "Signalez tout de suite Un bailleur qui vous demande des frais de visite et de commissions",
@@ -47,10 +64,8 @@ export default function HomePage() {
   // Animation fun fact automatique
   useEffect(() => {
     if (funFactsList.length === 0) return;
-  
     let index = 0;
     let timeout;
-  
     const showNextFunFact = () => {
       setFunFact(funFactsList[index]);
       timeout = setTimeout(() => {
@@ -61,34 +76,9 @@ export default function HomePage() {
         }, 10000);
       }, 5000);
     };
-  
     showNextFunFact();
     return () => clearTimeout(timeout);
   }, []);
-
-  // Fonction pour tracker le clic et rediriger (SOLUTION SANS POPUP)
-  const handleAdClick = async (ad) => {
-    if (trackingLoading) return;
-    
-    setTrackingLoading(true);
-    try {
-      // D'abord tracker le clic
-      await axios.post(`https://allo-bailleur-backend-1.onrender.com/ads/${ad.id}/track-click`);
-      
-      // Ensuite rediriger dans le même onglet
-      if (ad.redirect_url) {
-        window.location.href = ad.redirect_url;
-      }
-    } catch (error) {
-      console.error("Erreur lors du tracking du clic:", error);
-      // Rediriger quand même en cas d'erreur
-      if (ad.redirect_url) {
-        window.location.href = ad.redirect_url;
-      }
-    } finally {
-      setTrackingLoading(false);
-    }
-  };
 
   // Chargement des propriétés et annonces
   useEffect(() => {
@@ -104,10 +94,7 @@ export default function HomePage() {
           axios.get("https://allo-bailleur-backend-1.onrender.com/ads/"),
         ]);
 
-        const sortedProperties = [...feedRes.data].sort(
-          (a, b) => b.is_promoted - a.is_promoted
-        );
-
+        const sortedProperties = [...feedRes.data].sort((a, b) => b.is_promoted - a.is_promoted);
         setProperties(Array.isArray(sortedProperties) ? sortedProperties : []);
         setAds(Array.isArray(adsRes.data) ? adsRes.data : []);
       } catch (err) {
@@ -121,7 +108,6 @@ export default function HomePage() {
         setLoading(false);
       }
     }
-
     loadData();
   }, []);
 
@@ -136,7 +122,11 @@ export default function HomePage() {
   }, [ads]);
 
   return (
-    <div className="homepage-layout">
+    <div
+      ref={layoutRef}
+      className="homepage-layout"
+      style={{ paddingTop: `${headerHeight}px` }} // ✅ padding dynamique
+    >
       <div className="main-content">
         {error && <p className="error-message">{error}</p>}
 
@@ -150,41 +140,39 @@ export default function HomePage() {
               className="ads-content"
             >
               {ads[currentAdIndex]?.images?.length > 0 && (
-                <div 
+                <div
                   onClick={() => handleAdClick(ads[currentAdIndex])}
-                  style={{ 
-                    cursor: 'pointer', 
-                    display: 'inline-block',
-                    position: 'relative'
-                  }}
+                  style={{ cursor: "pointer", display: "inline-block", position: "relative" }}
                 >
                   <img
                     src={`https://allo-bailleur-backend-1.onrender.com${ads[currentAdIndex].images[0].url}`}
                     alt="Publicité"
                     className="ads-image"
-                    style={{ 
-                      border: '2px solid transparent', 
-                      borderRadius: '8px',
-                      transition: 'all 0.3s ease'
+                    style={{
+                      border: "2px solid transparent",
+                      borderRadius: "8px",
+                      transition: "all 0.3s ease",
                     }}
                     onMouseEnter={(e) => {
-                      e.target.style.border = '2px solid #007bff';
-                      e.target.style.transform = 'scale(1.02)';
+                      e.target.style.border = "2px solid #007bff";
+                      e.target.style.transform = "scale(1.02)";
                     }}
                     onMouseLeave={(e) => {
-                      e.target.style.border = '2px solid transparent';
-                      e.target.style.transform = 'scale(1)';
+                      e.target.style.border = "2px solid transparent";
+                      e.target.style.transform = "scale(1)";
                     }}
                   />
                   {trackingLoading && (
-                    <div style={{
-                      position: 'absolute',
-                      top: '10px',
-                      right: '10px',
-                      background: 'rgba(255, 255, 255, 0.8)',
-                      borderRadius: '50%',
-                      padding: '5px'
-                    }}>
+                    <div
+                      style={{
+                        position: "absolute",
+                        top: "10px",
+                        right: "10px",
+                        background: "rgba(255, 255, 255, 0.8)",
+                        borderRadius: "50%",
+                        padding: "5px",
+                      }}
+                    >
                       <Loader size={16} className="animate-spin" />
                     </div>
                   )}
@@ -194,7 +182,6 @@ export default function HomePage() {
           </div>
         )}
 
-        {/* Fun Fact flottant */}
         <AnimatePresence mode="wait">
           {funFact && (
             <motion.div
@@ -233,30 +220,28 @@ export default function HomePage() {
           </div>
         )}
 
-        {/* Message d'information */}
         {showPopupWarning && (
           <motion.div
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 50 }}
             style={{
-              position: 'fixed',
-              bottom: '20px',
-              right: '20px',
-              background: '#ff4757',
-              color: 'white',
-              padding: '12px 18px',
-              borderRadius: '8px',
+              position: "fixed",
+              bottom: "20px",
+              right: "20px",
+              background: "#ff4757",
+              color: "white",
+              padding: "12px 18px",
+              borderRadius: "8px",
               zIndex: 1000,
-              maxWidth: '300px',
-              boxShadow: '0 4px 15px rgba(0, 0, 0, 0.2)'
+              maxWidth: "300px",
+              boxShadow: "0 4px 15px rgba(0, 0, 0, 0.2)",
             }}
           >
             ⚠️ Redirection en cours...
           </motion.div>
         )}
       </div>
-      {/* Support en bas à droite */}
       <Support />
     </div>
   );
