@@ -1,6 +1,6 @@
 .bailleur-dashboard__container {
   display: flex;
-  margin-top: 50px; /* pour s’aligner sous un header fixe */
+  margin-top: 20px; /* pour s’aligner sous un header fixe */
   min-height: calc(90vh - 80px);
 }
 
