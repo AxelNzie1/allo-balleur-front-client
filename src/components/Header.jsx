@@ -19,8 +19,13 @@ export default function Header() {
   const location = useLocation();
   const isMobile = useIsMobile();
 
-  // ✅ Sur mobile + pages dashboard → mode minimal (logo + UserMenu)
-  const isDashboardMobile = isMobile && location.pathname.startsWith("/dashboard");
+  // 🔹 Masquer complètement le header sur certaines pages
+  const hideHeader =
+    location.pathname.startsWith("/properties/") ||
+    location.pathname.startsWith("/dashboard");
+
+  // 🔹 Mode minimal sur mobile pour dashboard et pages properties/:propertyId
+  const isMinimalMobile = isMobile && hideHeader;
 
   const [showDropdown, setShowDropdown] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem("token"));
@@ -142,17 +147,37 @@ export default function Header() {
     }
   };
 
+  // 🔹 JSX Header
+  if (hideHeader && isMobile) {
+    // Si mobile et page properties/:propertyId ou dashboard → mode minimal
+    return (
+      <header className="airbnb-header header minimal-mobile">
+        <Link to="/" className="header-logo">
+          <img src={logo} alt="Allo Bailleur Logo" className="logo-img" />
+        </Link>
+        {isLoggedIn && user && <UserMenu user={user} onLogout={() => {
+          localStorage.removeItem("token");
+          setIsLoggedIn(false);
+          setUser(null);
+          navigate("/");
+        }} />}
+      </header>
+    );
+  }
+
+  if (hideHeader) return null;
+
   return (
     <header className="airbnb-header header">
       {showErrorToast && <div className="error-toast">{loginError || searchError}</div>}
 
-      {/* ✅ Logo toujours présent */}
+      {/* Logo toujours présent */}
       <Link to="/" className="header-logo">
         <img src={logo} alt="Allo Bailleur Logo" className="logo-img" />
       </Link>
 
-      {/* ✅ Si on est en mode dashboard-mobile, on saute la recherche */}
-      {!isDashboardMobile && (
+      {/* Recherche */}
+      {!isMinimalMobile && (
         <div className="search-tabs-container">
           <div className="search-tabs-wrapper">
             <button
@@ -242,7 +267,7 @@ export default function Header() {
         </div>
       )}
 
-      {/* ✅ UserMenu toujours visible */}
+      {/* UserMenu */}
       <div className="user-menu-container" ref={dropdownRef}>
         {isLoggedIn && user ? (
           <UserMenu 
@@ -255,7 +280,7 @@ export default function Header() {
             }} 
           />
         ) : (
-          !isDashboardMobile && ( // Masquer la connexion sur mobile dashboard
+          !isMinimalMobile && (
             <>
               <button
                 className="login-button"
