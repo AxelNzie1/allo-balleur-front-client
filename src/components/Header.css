@@ -475,7 +475,6 @@ datalist {
 }
 
 
-
 /* --- Très petit écran --- */
 @media (max-width: 500px) {
   .airbnb-header {
@@ -490,8 +489,9 @@ datalist {
     min-width: 80px; /* Largeur minimale encore réduite */
   }
 
+  /* ✅ Logo plus grand sur mobile */
   .logo-img {
-    height: 28px; /* Taille encore plus petite pour mobile */
+    height: 40px; /* anciennement 28px */
   }
 
   .search-tabs-wrapper {
@@ -503,6 +503,7 @@ datalist {
     font-size: 0.85rem;
   }
 }
+
 
 .header.hidden-mobile {
   display: block; /* affiché par défaut */
