@@ -233,7 +233,7 @@
 @media (max-width: 480px) {
   .chat-widget.open {
     width: 100vw;
-    height: calc(100vh - 20px); /* laisse un petit espace pour le header */
+    height: calc(100vh - 60px); /* réduit encore pour laisser de la place au header */
     bottom: 0;
     right: 0;
     border-radius: 0;
@@ -241,7 +241,7 @@
 
   .chat-header h3 {
     font-size: 1rem;
-    margin-right: 10px; /* éviter que le bouton dépasse */
+    margin-right: 10px;
   }
 
   .chat-messages {
