@@ -199,7 +199,7 @@ export default function Header() {
                 name="city"
                 list="cities-list"
                 type="text"
-                placeholder="Ex: Abidjan"
+                placeholder="Ex: Douala"
                 value={searchParams.city}
                 onChange={handleChange}
               />
@@ -231,7 +231,7 @@ export default function Header() {
                 name="quartier"
                 list="quartiers-list"
                 type="text"
-                placeholder="Ex: Cocody"
+                placeholder="Ex: Bonapriso"
                 value={searchParams.quartier}
                 onChange={handleChange}
               />
