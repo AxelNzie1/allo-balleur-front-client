@@ -79,14 +79,12 @@
   padding: 0;
 }
 
-/* Image Carousel Styles */
 .pd-carousel-image {
   width: 100%;
-  height: auto;       /* Hauteur automatique pour voir l'image entière */
-  max-height: 80vh;   /* Limite pour éviter que l'image soit trop grande */
-  object-fit: contain; /* Affiche l'image entière sans découpage */
-  border-radius: 8px;
-  transition: opacity 0.3s ease;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border-radius: 20px; /* coins bien arrondis */
+  transition: transform 0.5s ease;
 }
 
 .pd-carousel-controls {
@@ -126,13 +124,16 @@
   color: #555;
 }
 
-.pd-thumbnails {
-  display: flex;
-  gap: 10px;
-  overflow-x: auto;
-  padding: 10px 5px;
-  margin-bottom: 20px;
-  scrollbar-width: thin;
+
+/* Miniatures du carrousel */
+.pd-thumbnail {
+  width: 80px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 12px; /* coins arrondis pour miniatures */
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: all 0.3s;
 }
 
 .pd-thumbnail {
@@ -146,8 +147,8 @@
 }
 
 .pd-thumbnail:hover {
+  border-color: #d80d68;
   transform: scale(1.05);
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
 }
 
 .pd-thumbnail.pd-active {
