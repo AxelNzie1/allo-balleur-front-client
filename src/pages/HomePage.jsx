@@ -16,6 +16,14 @@ export default function HomePage() {
   const [trackingLoading, setTrackingLoading] = useState(false);
   const [showPopupWarning, setShowPopupWarning] = useState(false);
 
+  // 👉 utilitaire pour gérer R2 ou backend local
+  const getImageUrl = (url) => {
+    if (!url) return "";
+    return url.startsWith("http")
+      ? url
+      : `https://allo-bailleur-backend-1.onrender.com/${url}`;
+  };
+
   // 🔹 Ref layout pour padding dynamique
   const layoutRef = useRef(null);
   const [headerHeight, setHeaderHeight] = useState(0);
@@ -25,7 +33,7 @@ export default function HomePage() {
       const headerEl = document.querySelector(".airbnb-header");
       if (headerEl && layoutRef.current) {
         const height = headerEl.getBoundingClientRect().height;
-        setHeaderHeight(height + 20); // 20px d'espace supplémentaire
+        setHeaderHeight(height + 20);
       }
     };
     updatePadding();
@@ -88,12 +96,10 @@ export default function HomePage() {
       try {
         const token = localStorage.getItem("token");
         const headers = token ? { Authorization: `Bearer ${token}` } : {};
-
         const [feedRes, adsRes] = await Promise.all([
           axios.get("https://allo-bailleur-backend-1.onrender.com/properties/feed", { headers }),
           axios.get("https://allo-bailleur-backend-1.onrender.com/ads/"),
         ]);
-
         const sortedProperties = [...feedRes.data].sort((a, b) => b.is_promoted - a.is_promoted);
         setProperties(Array.isArray(sortedProperties) ? sortedProperties : []);
         setAds(Array.isArray(adsRes.data) ? adsRes.data : []);
@@ -122,11 +128,7 @@ export default function HomePage() {
   }, [ads]);
 
   return (
-    <div
-      ref={layoutRef}
-      className="homepage-layout"
-      style={{ paddingTop: `${headerHeight}px` }} // ✅ padding dynamique
-    >
+    <div ref={layoutRef} className="homepage-layout" style={{ paddingTop: `${headerHeight}px` }}>
       <div className="main-content">
         {error && <p className="error-message">{error}</p>}
 
@@ -141,11 +143,11 @@ export default function HomePage() {
             >
               {ads[currentAdIndex]?.images?.length > 0 && (
                 <div
-                  onClick={() => handleAdClick(ads[currentAdIndex])}
+                  onClick={() => handleAdClick?.(ads[currentAdIndex])}
                   style={{ cursor: "pointer", display: "inline-block", position: "relative" }}
                 >
                   <img
-                    src={`https://allo-bailleur-backend-1.onrender.com${ads[currentAdIndex].images[0].url}`}
+                    src={getImageUrl(ads[currentAdIndex].images[0].url)}
                     alt="Publicité"
                     className="ads-image"
                     style={{
