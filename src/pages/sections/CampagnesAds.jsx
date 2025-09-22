@@ -269,10 +269,11 @@ const CampagnesAds = () => {
                   
                   {ad.images?.[0]?.url && (
                     <img 
-                      src={`https://allo-bailleur-backend-1.onrender.com${ad.images[0].url}`} 
+                      src={ad.images[0].url} 
                       alt="Publicité" 
                       className="ad-image"
                     />
+
                   )}
                   
                   <div className="ad-details">
