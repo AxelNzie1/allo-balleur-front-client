@@ -191,35 +191,79 @@
   background: transparent;
 }
 
-/* ====== Erreur ====== */
-.chatwin-error {
-  padding: 0.6rem 1rem;
-  background: #ffe6ec;
-  color: #d32f2f;
-  text-align: center;
-  font-size: 0.9rem;
-  border-top: 1px solid #f5c2c7;
-}
-
-/* ====== Responsive ====== */
+/* ====== Responsive Mobile ====== */
 @media (max-width: 768px) {
+  .chatwin-header {
+    padding: 0.6rem 0.8rem;
+    gap: 0.5rem;
+  }
+  .chatwin-back-btn {
+    font-size: 1.3rem;
+    min-width: 32px;
+    height: 32px;
+  }
   .chatwin-user-info h3 {
     font-size: 1rem;
   }
+  .chatwin-user-status {
+    font-size: 0.75rem;
+  }
+  .chatwin-messages {
+    padding: 0.5rem;
+    gap: 0.5rem;
+  }
   .chatwin-message-content {
     font-size: 0.9rem;
+    padding: 0.5rem 0.8rem;
+    max-width: 80%;
   }
-}
-
-@media (max-width: 480px) {
-  .chatwin-messages {
-    padding: 0.6rem;
-    gap: 0.5rem;
+  .chatwin-input-container {
+    padding: 0.4rem 0.5rem;
+    gap: 0.4rem;
   }
   .chatwin-input-field {
     font-size: 0.9rem;
+    min-height: 36px;
+    padding: 0.5rem 0.8rem;
   }
   .chatwin-send-btn {
-    font-size: 1.1rem;
+    min-width: 36px;
+    height: 36px;
+    font-size: 1rem;
+  }
+}
+
+/* ====== Très petit écran ====== */
+@media (max-width: 480px) {
+  .chatwin-header {
+    flex-direction: row;
+    justify-content: flex-start;
+    padding: 0.4rem 0.5rem;
+    gap: 0.4rem;
+  }
+  .chatwin-user-info h3 {
+    font-size: 0.95rem;
+  }
+  .chatwin-user-status {
+    font-size: 0.7rem;
+  }
+  .chatwin-messages {
+    padding: 0.4rem;
+    gap: 0.4rem;
+  }
+  .chatwin-message-content {
+    font-size: 0.85rem;
+    padding: 0.4rem 0.6rem;
+    max-width: 85%;
+  }
+  .chatwin-input-field {
+    font-size: 0.85rem;
+    min-height: 32px;
+    padding: 0.4rem 0.6rem;
+  }
+  .chatwin-send-btn {
+    min-width: 32px;
+    height: 32px;
+    font-size: 0.95rem;
   }
 }
