@@ -640,7 +640,7 @@ export default function PropertyDetail() {
           {images.length > 0 && (
             <>
               <img
-                src={`https://allo-bailleur-backend-1.onrender.com/${images[currentImageIndex].url}`}
+                src={images[currentImageIndex].url}
                 alt={`Image ${currentImageIndex + 1}`}
                 className="pd-carousel-image"
               />
@@ -670,15 +670,15 @@ export default function PropertyDetail() {
                 </button>
               </div>
               <div className="pd-thumbnails">
-                {images.map((img, index) => (
-                  <img
-                    key={index}
-                    src={`https://allo-bailleur-backend-1.onrender.com/${img.url}`}
-                    alt={`Miniature ${index + 1}`}
-                    className={`pd-thumbnail ${index === currentImageIndex ? "pd-active" : ""}`}
-                    onClick={() => setCurrentImageIndex(index)}
-                  />
-                ))}
+              {images.map((img, index) => (
+                <img
+                  key={index}
+                  src={img.url}
+                  alt={`Miniature ${index + 1}`}
+                  className={`pd-thumbnail ${index === currentImageIndex ? "pd-active" : ""}`}
+                  onClick={() => setCurrentImageIndex(index)}
+                />
+              ))}
               </div>
             </>
           )}
