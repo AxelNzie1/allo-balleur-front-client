@@ -1,6 +1,6 @@
 :root {
   --primary: #FF00B7;
-  --primary-dark: #9b00ff;       /* Violet complémentaire pour le dégradé */
+  --primary-dark: #9b00ff; /* Violet complémentaire pour le dégradé */
   --bg-light: #f9f9fb;
   --text-dark: #2c2c2c;
   --text-muted: #777;
@@ -20,6 +20,8 @@
 .chatwin-header {
   display: flex;
   align-items: center;
+  justify-content: flex-start; /* flèche + infos collés à gauche */
+  gap: 0.8rem;                /* espace entre flèche et infos */
   padding: 0.8rem 1rem;
   background: white;
   border-bottom: 1px solid #e5e7eb;
@@ -33,23 +35,34 @@
   border: none;
   font-size: 1.5rem;
   color: var(--primary);
-  margin-right: 0.8rem;
   cursor: pointer;
   transition: color 0.25s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 36px;  /* zone cliquable stable */
+  height: 36px;
 }
 .chatwin-back-btn:hover {
   color: #d9009f;
 }
 
+.chatwin-user-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
 .chatwin-user-info h3 {
   margin: 0;
   font-size: 1.1rem;
   color: var(--text-dark);
   font-weight: 600;
+  line-height: 1.2;
 }
 .chatwin-user-status {
   font-size: 0.85rem;
   color: var(--text-muted);
+  line-height: 1.1;
 }
 
 /* ====== Zone des messages ====== */
@@ -114,9 +127,8 @@
 /* ✅ Heure en blanc uniquement pour les messages envoyés */
 .chatwin-sent .chatwin-message-time {
   color: #ffffff;
-  opacity: 0.8; /* légère transparence pour ne pas trop contraster */
+  opacity: 0.8;
 }
-
 
 /* ====== Barre d’envoi ====== */
 .chatwin-input-container {
@@ -125,10 +137,11 @@
   padding: 0.6rem 0.8rem;
   background: white;
   border-top: 1px solid #e5e7eb;
+  gap: 0.6rem;
 }
 
 .chatwin-input-field {
-  flex: 1;
+  flex: 1;                          /* prend tout l’espace dispo */
   resize: none;
   border: 1px solid #e5e7eb;
   border-radius: 20px;
@@ -138,6 +151,7 @@
   max-height: 150px;
   line-height: 1.4;
   transition: border 0.2s ease;
+  min-height: 42px;                 /* cohérent avec le bouton */
 }
 .chatwin-input-field:focus {
   border-color: var(--primary);
@@ -147,12 +161,15 @@
   background: var(--primary);
   color: white;
   border: none;
-  margin-left: 0.6rem;
-  padding: 0.55rem 0.9rem;
+  min-width: 42px;                  /* taille fixe du bouton */
+  height: 42px;
   border-radius: 50%;
   font-size: 1.2rem;
   cursor: pointer;
   transition: background 0.25s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .chatwin-send-btn:disabled {
   opacity: 0.6;
