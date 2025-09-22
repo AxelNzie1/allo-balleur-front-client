@@ -16,17 +16,19 @@ export default function HomePage() {
   const [trackingLoading, setTrackingLoading] = useState(false);
   const [showPopupWarning, setShowPopupWarning] = useState(false);
 
-  // 👉 utilitaire pour gérer R2 ou backend local
-  const getImageUrl = (url) => {
-    if (!url) return "";
-    return url.startsWith("http")
-      ? url
-      : `https://allo-bailleur-backend-1.onrender.com/${url}`;
-  };
-
   // 🔹 Ref layout pour padding dynamique
   const layoutRef = useRef(null);
   const [headerHeight, setHeaderHeight] = useState(0);
+
+  // 👉 utilitaire pour gérer R2 ou backend local
+  const getImageUrl = (url) => {
+    if (!url) return "";
+    if (url.startsWith("http://") || url.startsWith("https://")) {
+      return url; // URL externe (Cloudflare R2)
+    }
+    // URL locale relative
+    return `https://allo-bailleur-backend-1.onrender.com/${url.replace(/^\/+/, "")}`;
+  };
 
   useEffect(() => {
     const updatePadding = () => {
