@@ -10,13 +10,29 @@ const PropertiesSearchPage = React.lazy(() => import("./pages/PropertiesSearchPa
 const PropertyDetail = React.lazy(() => import("./pages/PropertyDetails"));
 const ModifierBien = React.lazy(() => import("./pages/ModifierBien"));
 
+// 🔹 Loader stylé simple
+function Loader() {
+  return (
+    <div style={{
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      height: '60vh',
+      fontSize: '1.2rem',
+      color: '#FF0086',
+      fontWeight: 'bold'
+    }}>
+      Chargement de la page...
+    </div>
+  );
+}
+
 function App() {
   return (
     <>
       <Header />
       <div style={{ paddingTop: "70px" }}>
-        {/* 🔹 Suspense pour gérer le fallback pendant le chargement */}
-        <Suspense fallback={<div>Chargement de la page...</div>}>
+        <Suspense fallback={<Loader />}>
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/register" element={<Register />} />
