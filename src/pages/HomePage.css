@@ -103,12 +103,12 @@
 /* Responsive Fun Fact pour tablettes */
 @media (max-width: 1024px) {
   .fun-fact-floating {
-    top: calc(70px + 16px); /* sous le header */
+    top: calc(50px + 16px); /* sous le header */
     left: 50%;
     transform: translateX(-50%);
     width: 240px;
     font-size: 12px;
-    padding: 12px 16px;
+    padding: 08px 10px;
   }
 
   @keyframes floating {
@@ -119,14 +119,9 @@
 
 /* Responsive Fun Fact pour mobile */
 @media (max-width: 768px) {
-  .fun-fact-floating {
-    top: calc(60px + 12px); /* juste sous header plus petit */
-    left: 50%;
-    transform: translateX(-50%);
-    width: 80%;
-    max-width: 350px;
-    font-size: 11px;
-    padding: 10px 14px;
+  .homepage-layout {
+    padding: calc(50px + 8px) 16px 16px; 
+    /* top = hauteur du header + 8px, sides = 16px, bottom = 16px */
   }
 }
 

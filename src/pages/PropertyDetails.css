@@ -832,6 +832,7 @@
     height: auto;
     aspect-ratio: 16 / 9;
     object-fit: contain;
+    margin-top: 0px;
   }
 
   .pd-thumbnail {
