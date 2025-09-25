@@ -2,7 +2,6 @@ import React, { Suspense } from "react";
 import { Routes, Route } from "react-router-dom";
 import Header from "./components/Header";
 
-// 🔹 Lazy loading des pages
 const Register = React.lazy(() => import("./pages/Register"));
 const BailleurDashboard = React.lazy(() => import("./pages/BailleurDashboard"));
 const HomePage = React.lazy(() => import("./pages/HomePage"));
@@ -10,7 +9,6 @@ const PropertiesSearchPage = React.lazy(() => import("./pages/PropertiesSearchPa
 const PropertyDetail = React.lazy(() => import("./pages/PropertyDetails"));
 const ModifierBien = React.lazy(() => import("./pages/ModifierBien"));
 
-// 🔹 Loader stylé simple
 function Loader() {
   return (
     <div style={{
