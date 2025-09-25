@@ -8,7 +8,7 @@ export default defineConfig({
     react(),
     // ✅ Configuration PWA
     VitePWA({
-      registerType: 'autoUpdate',        // met à jour le service worker automatiquement
+      registerType: 'autoUpdate', // met à jour le service worker automatiquement
       includeAssets: ['favicon.ico', 'robots.txt', 'apple-touch-icon.png'],
       manifest: {
         name: 'Allo Bailleur',
@@ -38,4 +38,21 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
     },
   },
+  build: {
+    rollupOptions: {
+      output: {
+        // ✅ Séparation des librairies lourdes
+        manualChunks(id) {
+          if (id.includes('node_modules')) {
+            if (id.includes('react') || id.includes('react-dom')) {
+              return 'vendor-react';
+            }
+            return 'vendor';
+          }
+        }
+      }
+    },
+    // optionnel : avertissement chunk > 1 Mo
+    chunkSizeWarningLimit: 1000,
+  }
 })
