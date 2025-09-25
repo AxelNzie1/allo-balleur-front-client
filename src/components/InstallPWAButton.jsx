@@ -10,37 +10,28 @@ export default function InstallPWAButton() {
       e.preventDefault();
       setDeferredPrompt(e);
     };
-
     window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
 
     // iOS detection
     const isIos = /iphone|ipad|ipod/.test(window.navigator.userAgent.toLowerCase());
-    const isInStandaloneMode = ('standalone' in window.navigator) && window.navigator.standalone;
-    if (isIos && !isInStandaloneMode) {
-      setShowIosBanner(true);
-    }
+    const isInStandaloneMode = ("standalone" in window.navigator) && window.navigator.standalone;
+    if (isIos && !isInStandaloneMode) setShowIosBanner(true);
 
-    return () => {
-      window.removeEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
-    };
+    return () => window.removeEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
   }, []);
 
   const handleInstallClick = () => {
     if (!deferredPrompt) return;
     deferredPrompt.prompt();
     deferredPrompt.userChoice.then((choiceResult) => {
-      if (choiceResult.outcome === "accepted") {
-        console.log("PWA installée");
-      } else {
-        console.log("Installation refusée");
-      }
+      console.log(choiceResult.outcome === "accepted" ? "PWA installée" : "Installation refusée");
       setDeferredPrompt(null);
     });
   };
 
   return (
     <>
-      {/* Bouton Android */}
+      {/* Bouton Android - petit ticket animé */}
       {deferredPrompt && (
         <button
           onClick={handleInstallClick}
@@ -48,16 +39,20 @@ export default function InstallPWAButton() {
             position: "fixed",
             bottom: "20px",
             right: "20px",
-            padding: "10px 20px",
-            background: "#FF0086",
+            padding: "12px 24px",
+            background: "linear-gradient(135deg, #FF0086, #f406b1)",
             color: "#fff",
             border: "none",
-            borderRadius: "8px",
+            borderRadius: "12px 4px 12px 4px",
             cursor: "pointer",
             zIndex: 1000,
+            fontWeight: 600,
+            fontSize: "0.95rem",
+            boxShadow: "0 6px 14px rgba(0,0,0,0.2)",
+            animation: "bounce 2s infinite",
           }}
         >
-          Installer l'app
+          📥 Installer l'app
         </button>
       )}
 
@@ -73,6 +68,8 @@ export default function InstallPWAButton() {
             bottom: 0,
             width: "100%",
             zIndex: 1000,
+            fontWeight: 500,
+            animation: "slideUp 1s ease-out",
           }}
         >
           Installez cette app sur votre écran d'accueil : appuyez sur{" "}
@@ -92,6 +89,18 @@ export default function InstallPWAButton() {
           </button>
         </div>
       )}
+
+      {/* Animations */}
+      <style>{`
+        @keyframes bounce {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-6px); }
+        }
+        @keyframes slideUp {
+          0% { transform: translateY(100%); opacity: 0; }
+          100% { transform: translateY(0); opacity: 1; }
+        }
+      `}</style>
     </>
   );
 }
