@@ -5,6 +5,8 @@ import UserMenu from "../components/UserMenu";
 import "../components/Header.css";
 import logo from "../assets/logo.svg";
 import { useIsMobile } from "../hooks/useIsMobile";
+import InstallPWAButton from "./components/InstallPWAButton"; // <-- ajouté
+
 
 const HOUSE_KEYWORDS = [
   "studio","appartement","villa","boutique","piscine","jardin","terrasse","garage",
@@ -325,6 +327,7 @@ export default function Header() {
                     <Link to="/register" className="register-link">
                       Créer un compte
                     </Link>
+                    <InstallPWAButton /> {/* bouton d'installation PWA */}
                   </div>
                 </div>
               )}

@@ -1,7 +1,7 @@
 import React, { Suspense } from "react";
 import { Routes, Route } from "react-router-dom";
 import Header from "./components/Header";
-import InstallPWAButton from "./components/InstallPWAButton"; // <-- ajouté
+
 
 const Register = React.lazy(() => import("./pages/Register"));
 const BailleurDashboard = React.lazy(() => import("./pages/BailleurDashboard"));
@@ -30,7 +30,7 @@ function App() {
   return (
     <>
       <Header />
-      <InstallPWAButton /> {/* bouton d'installation PWA */}
+
       <div style={{ paddingTop: "70px" }}>
         <Suspense fallback={<Loader />}>
           <Routes>
