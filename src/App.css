@@ -1,23 +1,31 @@
+/* Conteneur principal */
 #root {
   max-width: 1280px;
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
+  font-family: 'Inter', sans-serif;
+  background-color: #f9f9fb;
+  color: #333;
 }
 
+/* Logo */
 .logo {
   height: 6em;
   padding: 1.5em;
   will-change: filter;
-  transition: filter 300ms;
+  transition: filter 300ms, transform 300ms;
+  cursor: pointer;
 }
 .logo:hover {
   filter: drop-shadow(0 0 2em #646cffaa);
+  transform: scale(1.05);
 }
 .logo.react:hover {
   filter: drop-shadow(0 0 2em #61dafbaa);
 }
 
+/* Animation du logo */
 @keyframes logo-spin {
   from {
     transform: rotate(0deg);
@@ -26,17 +34,83 @@
     transform: rotate(360deg);
   }
 }
-
 @media (prefers-reduced-motion: no-preference) {
   a:nth-of-type(2) .logo {
     animation: logo-spin infinite 20s linear;
   }
 }
 
+/* Carte */
 .card {
   padding: 2em;
+  border-radius: 12px;
+  background-color: #fff;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
 }
 
+/* Loader */
+.loader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 60vh;
+  font-size: 1.2rem;
+  color: #FF0086;
+  font-weight: bold;
+  animation: pulse 1.5s infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+/* Boutons globaux */
+button {
+  padding: 0.6em 1.2em;
+  border-radius: 8px;
+  border: none;
+  background: #FF0086;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.2s;
+}
+button:hover {
+  background: #e60079;
+  transform: translateY(-2px);
+}
+
+/* Liens */
+a {
+  color: #646cff;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+a:hover {
+  color: #FF0086;
+}
+
+/* Texte secondaire */
 .read-the-docs {
   color: #888;
+  font-size: 0.9rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  #root {
+    padding: 1rem;
+  }
+  .logo {
+    height: 4.5em;
+    padding: 1em;
+  }
+  .card {
+    padding: 1.5em;
+  }
 }
