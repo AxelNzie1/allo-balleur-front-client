@@ -31,7 +31,7 @@ function App() {
     <>
       <Header />
       <InstallPWAButton /> {/* bouton d'installation PWA */}
-      <div style={{ paddingTop: "70px" }}>
+      <div className="main-content">
         <Suspense fallback={<Loader />}>
           <Routes>
             <Route path="/" element={<HomePage />} />

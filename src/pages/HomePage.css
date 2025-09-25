@@ -74,7 +74,7 @@
 /* Fun fact flottant */
 .fun-fact-floating {
   position: fixed;
-  top: 320px; /* juste sous ton header */
+  top: 280px; /* juste sous le header */
   left: 85%;
   transform: translateX(-30%);
   background: #f406b1;
@@ -82,7 +82,7 @@
   padding: 10px 20px;
   border-radius: 10px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-  font-size: 10px;
+  font-size: 14px;
   font-weight: 500;
   display: flex;
   align-items: center;
@@ -91,37 +91,42 @@
   animation: floating 3s ease-in-out infinite;
 }
 
-@keyframes floating {
-  0%, 100% { transform: translate(-50%, 0); }
-  50% { transform: translate(-50%, -8px); }
-}
-
 .fun-fact-icon {
   color: #ee4b5e; /* rouge/rose */
 }
 
-/* Responsive Fun Fact */
+@keyframes floating {
+  0%, 100% { transform: translateX(-30%) translateY(0); }
+  50% { transform: translateX(-30%) translateY(-0px); }
+}
+
+/* Responsive Fun Fact pour tablettes */
 @media (max-width: 1024px) {
   .fun-fact-floating {
-    top: auto;
-    bottom: 20px;
-    right: 10px;
-    left: auto;
-    transform: none;
+    top: calc(70px + 16px); /* sous le header */
+    left: 50%;
+    transform: translateX(-50%);
     width: 240px;
-    font-size: 11px;
+    font-size: 12px;
+    padding: 12px 16px;
+  }
+
+  @keyframes floating {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(-6px); }
   }
 }
 
+/* Responsive Fun Fact pour mobile */
 @media (max-width: 768px) {
   .fun-fact-floating {
-    bottom: 10px;
-    left: 25%;
+    top: calc(60px + 12px); /* juste sous header plus petit */
+    left: 50%;
     transform: translateX(-50%);
-    width: 40%;
-    max-width: 380px;
-    font-size: 12px;
-    padding: 12px 16px;
+    width: 80%;
+    max-width: 350px;
+    font-size: 11px;
+    padding: 10px 14px;
   }
 }
 

@@ -42,14 +42,14 @@
 
 /* Carte */
 .card {
-  padding: 2em;
+  padding: 1em;
   border-radius: 12px;
   background-color: #fff;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
   transition: transform 0.3s, box-shadow 0.3s;
 }
 .card:hover {
-  transform: translateY(-4px);
+  transform: translateY(-2px);
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
 }
 
@@ -58,7 +58,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 60vh;
+  height: 10vh;
   font-size: 1.2rem;
   color: #FF0086;
   font-weight: bold;
@@ -111,6 +111,6 @@ a:hover {
     padding: 1em;
   }
   .card {
-    padding: 1.5em;
+    padding: 1em;
   }
 }

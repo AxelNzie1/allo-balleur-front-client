@@ -58,7 +58,7 @@
 
 /* Conteneur d'image */
 .properties-search-image-container {
-  height: 200px;
+  height: 100px;
   overflow: hidden;
   position: relative;
 }
