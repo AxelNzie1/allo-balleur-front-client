@@ -56,28 +56,43 @@ export default function InstallPWAButton() {
           style={{
             position: "fixed",
             bottom: "1rem",
-            left: "1rem",         // ✅ Alignée à gauche
+            left: "1rem",
             background: "rgba(255,255,255,0.95)",
             borderRadius: "1rem",
-            padding: "0.7rem 1.2rem",
+            padding: "0.8rem 1.2rem",
             display: "flex",
             alignItems: "center",
             gap: "0.8rem",
             boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
             backdropFilter: "blur(8px)",
             fontSize: "0.95rem",
-            lineHeight: 1.4,
+            lineHeight: 1.5,
             animation: "slideUp 0.4s ease-out",
             zIndex: 1000,
-            maxWidth: "320px",    // pour éviter qu'elle ne prenne trop de place
+            maxWidth: "320px",
           }}
         >
-          
-          <span style={{ flex: 1, padding: "0 0.5rem" }}>
-          <strong>Installer cette application à l’écran d’accueil</strong>.
-            Touchez l'icone <strong>Partager</strong> <IoShareOutline size={22} color="#007aff" />
-            , puis <strong>Ajouter à l'ecran d'acceuil</strong> <IoAddCircleOutline size={22} color="#007aff" style={{ margin: "0 6px" }} />
+          <span
+            style={{
+              flex: 1,
+              padding: "0 0.5rem",
+              textAlign: "left",
+              display: "flex",
+              flexDirection: "column",
+              gap: "0.4rem",
+            }}
+          >
+            <strong style={{ fontSize: "1rem" }}>
+              Installer cette application à l’écran d’accueil
+            </strong>
+            <span style={{ display: "flex", alignItems: "center", flexWrap: "wrap", gap: "0.35rem" }}>
+              Touchez l’icône <strong>Partager</strong>
+              <IoShareOutline size={20} color="#007aff" />
+              puis <strong>Ajouter à l’écran d’accueil</strong>
+              <IoAddCircleOutline size={20} color="#007aff" />
+            </span>
           </span>
+
           <button
             onClick={() => setShowIosBanner(false)}
             style={{
