@@ -98,7 +98,7 @@
 
   .bailleur-dashboard__container {
     flex-direction: column;
-    margin-top: 0 !important; /* pas d’espace sous le header */
+    margin-top: 10 !important; /* pas d’espace sous le header */
     min-height: auto; /* adapte la hauteur à l’écran */
   }
 
@@ -112,7 +112,7 @@
     border-bottom: 1px solid #eee;
     overflow-x: auto;
     z-index: auto;
-    padding-top: 0;
+    padding-top: 10;
   }
 
   .bailleur-dashboard__sidebar ul {
