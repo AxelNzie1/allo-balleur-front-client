@@ -88,8 +88,9 @@ export default function InstallPWAButton() {
             <span style={{ display: "flex", alignItems: "center", flexWrap: "wrap", gap: "0.35rem" }}>
               Touchez l’icône <strong>Partager</strong>
               <IoShareOutline size={20} color="#FF008C" />
-              puis scrollez jusqu'à l'icone <strong> à l’écran d’accueil</strong>
-              <IoAddCircleOutline size={20} color="#FF008C" />
+              puis defilez jusqu'à l'icone <strong> Ecran d’accueil</strong>
+              <IoAddCircleOutline size={20} color="#FF008C" /> 
+              et touchez <strong>Ajouter</strong>
             </span>
           </span>
 
