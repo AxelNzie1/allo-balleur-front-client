@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { IoShareOutline, IoAddCircleOutline } from "react-icons/io5"; // icônes iOS
+import { IoShareOutline, IoAddCircleOutline } from "react-icons/io5";
 
 export default function InstallPWAButton() {
   const [deferredPrompt, setDeferredPrompt] = useState(null);
@@ -27,6 +27,7 @@ export default function InstallPWAButton() {
 
   return (
     <>
+      {/* Bouton Android */}
       {deferredPrompt && (
         <button
           onClick={handleInstallClick}
@@ -49,41 +50,43 @@ export default function InstallPWAButton() {
         </button>
       )}
 
+      {/* Bannière iOS – alignée à gauche */}
       {showIosBanner && (
         <div
           style={{
             position: "fixed",
             bottom: "1rem",
-            left: "50%",
-            transform: "translateX(-50%)",
+            left: "1rem",         // ✅ Alignée à gauche
             background: "rgba(255,255,255,0.95)",
             borderRadius: "1rem",
-            padding: "0.7rem 1rem",
+            padding: "0.7rem 1.2rem",
             display: "flex",
             alignItems: "center",
-            gap: "0.5rem",
+            gap: "0.8rem",
             boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
             backdropFilter: "blur(8px)",
-            fontSize: "0.9rem",
+            fontSize: "0.95rem",
+            lineHeight: 1.4,
             animation: "slideUp 0.4s ease-out",
             zIndex: 1000,
+            maxWidth: "320px",    // pour éviter qu'elle ne prenne trop de place
           }}
         >
           <IoShareOutline size={22} color="#007aff" />
-          <span>
+          <span style={{ flex: 1, padding: "0 0.5rem" }}>
             Touchez <strong>Partager</strong>, puis
-            <IoAddCircleOutline size={22} color="#007aff" style={{margin:"0 4px"}} />
+            <IoAddCircleOutline size={22} color="#007aff" style={{ margin: "0 6px" }} />
             <strong>Ajouter à l’écran d’accueil</strong>.
           </span>
           <button
             onClick={() => setShowIosBanner(false)}
             style={{
-              marginLeft: "0.5rem",
               background: "transparent",
               border: "none",
               color: "#007aff",
-              fontSize: "1.2rem",
+              fontSize: "1.3rem",
               cursor: "pointer",
+              lineHeight: 1,
             }}
             aria-label="Fermer"
           >
