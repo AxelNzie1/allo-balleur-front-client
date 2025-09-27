@@ -7,19 +7,20 @@ export default function InstallPWAButton() {
   const [hasScrolled, setHasScrolled] = useState(false);
 
   useEffect(() => {
+    // Android
     const handleBeforeInstallPrompt = (e) => {
       e.preventDefault();
       setDeferredPrompt(e);
     };
     window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
 
+    // iOS
     const isIos = /iphone|ipad|ipod/.test(window.navigator.userAgent.toLowerCase());
     const isStandalone = "standalone" in window.navigator && window.navigator.standalone;
 
     if (isIos && !isStandalone) {
-      // Afficher la bannière seulement après scroll
       const handleScroll = () => {
-        if (window.scrollY > 50 && !hasScrolled) { // 50px de scroll
+        if (window.scrollY > 50 && !hasScrolled) {
           setShowIosBanner(true);
           setHasScrolled(true);
         }
@@ -100,8 +101,9 @@ export default function InstallPWAButton() {
             <span style={{ display: "flex", alignItems: "center", flexWrap: "wrap", gap: "0.35rem" }}>
               Touchez l’icône <strong>Partager</strong>
               <IoShareOutline size={20} color="#FF008C" />
-              puis <strong>Ajouter à l’écran d’accueil</strong>
-              <IoAddCircleOutline size={20} color="#FF008C" />
+              puis défilez jusqu'à l'icône <strong> Ecran d’accueil</strong>
+              <IoAddCircleOutline size={20} color="#FF008C" /> 
+              enfin <strong>Ajouter</strong>
             </span>
           </span>
 
