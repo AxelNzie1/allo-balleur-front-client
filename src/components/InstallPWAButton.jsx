@@ -20,7 +20,7 @@ export default function InstallPWAButton() {
 
     if (isIos && !isStandalone) {
       const handleScroll = () => {
-        if (window.scrollY > 50 && !hasScrolled) {
+        if (window.scrollY > 150 && !hasScrolled) {
           setShowIosBanner(true);
           setHasScrolled(true);
         }
