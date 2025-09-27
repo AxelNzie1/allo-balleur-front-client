@@ -1,21 +1,20 @@
 import { useEffect, useState } from "react";
+import { IoShareOutline, IoAddCircleOutline } from "react-icons/io5"; // icônes iOS
 
 export default function InstallPWAButton() {
   const [deferredPrompt, setDeferredPrompt] = useState(null);
   const [showIosBanner, setShowIosBanner] = useState(false);
 
   useEffect(() => {
-    // Android : beforeinstallprompt
     const handleBeforeInstallPrompt = (e) => {
       e.preventDefault();
       setDeferredPrompt(e);
     };
     window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
 
-    // iOS detection
     const isIos = /iphone|ipad|ipod/.test(window.navigator.userAgent.toLowerCase());
-    const isInStandaloneMode = ("standalone" in window.navigator) && window.navigator.standalone;
-    if (isIos && !isInStandaloneMode) setShowIosBanner(true);
+    const isStandalone = "standalone" in window.navigator && window.navigator.standalone;
+    if (isIos && !isStandalone) setShowIosBanner(true);
 
     return () => window.removeEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
   }, []);
@@ -23,81 +22,79 @@ export default function InstallPWAButton() {
   const handleInstallClick = () => {
     if (!deferredPrompt) return;
     deferredPrompt.prompt();
-    deferredPrompt.userChoice.then((choiceResult) => {
-      console.log(choiceResult.outcome === "accepted" ? "PWA installée" : "Installation refusée");
-      setDeferredPrompt(null);
-    });
+    deferredPrompt.userChoice.finally(() => setDeferredPrompt(null));
   };
 
   return (
     <>
-      {/* Bouton Android - petit ticket animé */}
       {deferredPrompt && (
         <button
           onClick={handleInstallClick}
           style={{
             position: "fixed",
-            bottom: "20px",
-            right: "20px",
-            padding: "12px 24px",
-            background: "linear-gradient(135deg, #FF0086, #f406b1)",
+            bottom: 20,
+            right: 20,
+            padding: "10px 20px",
+            background: "linear-gradient(135deg,#FF0086,#f406b1)",
             color: "#fff",
             border: "none",
-            borderRadius: "12px 4px 12px 4px",
-            cursor: "pointer",
-            zIndex: 1000,
+            borderRadius: 12,
             fontWeight: 600,
-            fontSize: "0.95rem",
-            boxShadow: "0 6px 14px rgba(0,0,0,0.2)",
-            animation: "bounce 2s infinite",
+            cursor: "pointer",
+            boxShadow: "0 6px 14px rgba(0,0,0,0.25)",
+            zIndex: 1000,
           }}
         >
-          📥 Installer l'app
+          📥 Installer l’app
         </button>
       )}
 
-      {/* Bannière iOS */}
       {showIosBanner && (
         <div
           style={{
-            background: "#FF0086",
-            color: "white",
-            padding: "1em",
-            textAlign: "center",
             position: "fixed",
-            bottom: 0,
-            width: "100%",
+            bottom: "1rem",
+            left: "50%",
+            transform: "translateX(-50%)",
+            background: "rgba(255,255,255,0.95)",
+            borderRadius: "1rem",
+            padding: "0.7rem 1rem",
+            display: "flex",
+            alignItems: "center",
+            gap: "0.5rem",
+            boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+            backdropFilter: "blur(8px)",
+            fontSize: "0.9rem",
+            animation: "slideUp 0.4s ease-out",
             zIndex: 1000,
-            fontWeight: 500,
-            animation: "slideUp 1s ease-out",
           }}
         >
-          Installez cette app sur votre écran d'accueil : appuyez sur{" "}
-          <strong>Partager → Ajouter à l'écran d'accueil</strong>
+          <IoShareOutline size={22} color="#007aff" />
+          <span>
+            Touchez <strong>Partager</strong>, puis
+            <IoAddCircleOutline size={22} color="#007aff" style={{margin:"0 4px"}} />
+            <strong>Ajouter à l’écran d’accueil</strong>.
+          </span>
           <button
             onClick={() => setShowIosBanner(false)}
             style={{
-              marginLeft: "1em",
+              marginLeft: "0.5rem",
               background: "transparent",
               border: "none",
-              color: "white",
-              fontSize: "1.2em",
+              color: "#007aff",
+              fontSize: "1.2rem",
               cursor: "pointer",
             }}
+            aria-label="Fermer"
           >
             ✕
           </button>
         </div>
       )}
 
-      {/* Animations */}
       <style>{`
-        @keyframes bounce {
-          0%, 100% { transform: translateY(0); }
-          50% { transform: translateY(-6px); }
-        }
         @keyframes slideUp {
-          0% { transform: translateY(100%); opacity: 0; }
+          0% { transform: translateY(120%); opacity: 0; }
           100% { transform: translateY(0); opacity: 1; }
         }
       `}</style>
