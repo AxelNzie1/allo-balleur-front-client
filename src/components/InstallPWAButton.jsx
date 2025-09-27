@@ -72,11 +72,13 @@ export default function InstallPWAButton() {
             maxWidth: "320px",    // pour éviter qu'elle ne prenne trop de place
           }}
         >
-          <IoShareOutline size={22} color="#007aff" />
+          
           <span style={{ flex: 1, padding: "0 0.5rem" }}>
-            Touchez <strong>Partager</strong>, puis
+          <strong>Installer cette application à l’écran d’accueil</strong>.
+            Touchez l'icone <strong>Partager</strong>
+            <IoShareOutline size={22} color="#007aff" />
+            , puis <strong>Ajouter à l'ecran d'acceuil</strong>
             <IoAddCircleOutline size={22} color="#007aff" style={{ margin: "0 6px" }} />
-            <strong>Ajouter à l’écran d’accueil</strong>.
           </span>
           <button
             onClick={() => setShowIosBanner(false)}
