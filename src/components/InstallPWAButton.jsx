@@ -4,6 +4,7 @@ import { IoShareOutline, IoAddCircleOutline } from "react-icons/io5";
 export default function InstallPWAButton() {
   const [deferredPrompt, setDeferredPrompt] = useState(null);
   const [showIosBanner, setShowIosBanner] = useState(false);
+  const [hasScrolled, setHasScrolled] = useState(false);
 
   useEffect(() => {
     const handleBeforeInstallPrompt = (e) => {
@@ -14,10 +15,21 @@ export default function InstallPWAButton() {
 
     const isIos = /iphone|ipad|ipod/.test(window.navigator.userAgent.toLowerCase());
     const isStandalone = "standalone" in window.navigator && window.navigator.standalone;
-    if (isIos && !isStandalone) setShowIosBanner(true);
+
+    if (isIos && !isStandalone) {
+      // Afficher la bannière seulement après scroll
+      const handleScroll = () => {
+        if (window.scrollY > 50 && !hasScrolled) { // 50px de scroll
+          setShowIosBanner(true);
+          setHasScrolled(true);
+        }
+      };
+      window.addEventListener("scroll", handleScroll);
+      return () => window.removeEventListener("scroll", handleScroll);
+    }
 
     return () => window.removeEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
-  }, []);
+  }, [hasScrolled]);
 
   const handleInstallClick = () => {
     if (!deferredPrompt) return;
@@ -57,7 +69,7 @@ export default function InstallPWAButton() {
             position: "fixed",
             bottom: "1rem",
             left: "1rem",
-            background_color: "rgba(255,255,255,0.95)",
+            backgroundColor: "rgba(255,255,255,0.95)",
             borderRadius: "1rem",
             padding: "0.8rem 1.2rem",
             display: "flex",
@@ -88,9 +100,8 @@ export default function InstallPWAButton() {
             <span style={{ display: "flex", alignItems: "center", flexWrap: "wrap", gap: "0.35rem" }}>
               Touchez l’icône <strong>Partager</strong>
               <IoShareOutline size={20} color="#FF008C" />
-              puis defilez jusqu'à l'icone <strong> Ecran d’accueil</strong>
-              <IoAddCircleOutline size={20} color="#FF008C" /> 
-              et touchez <strong>Ajouter</strong>
+              puis <strong>Ajouter à l’écran d’accueil</strong>
+              <IoAddCircleOutline size={20} color="#FF008C" />
             </span>
           </span>
 
