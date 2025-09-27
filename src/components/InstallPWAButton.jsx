@@ -57,7 +57,7 @@ export default function InstallPWAButton() {
             position: "fixed",
             bottom: "1rem",
             left: "1rem",
-            background: "rgba(255,255,255,0.95)",
+            background_color: "rgba(255,255,255,0.95)",
             borderRadius: "1rem",
             padding: "0.8rem 1.2rem",
             display: "flex",
@@ -82,14 +82,14 @@ export default function InstallPWAButton() {
               gap: "0.4rem",
             }}
           >
-            <strong style={{ fontSize: "1rem" }}>
+            <strong style={{ fontSize: "1rem", color: "#FF008C" }}>
               Installer cette application à l’écran d’accueil
             </strong>
             <span style={{ display: "flex", alignItems: "center", flexWrap: "wrap", gap: "0.35rem" }}>
               Touchez l’icône <strong>Partager</strong>
-              <IoShareOutline size={20} color="#007aff" />
-              puis <strong>Ajouter à l’écran d’accueil</strong>
-              <IoAddCircleOutline size={20} color="#007aff" />
+              <IoShareOutline size={20} color="#FF008C" />
+              puis scrollez jusqu'à l'icone <strong> à l’écran d’accueil</strong>
+              <IoAddCircleOutline size={20} color="#FF008C" />
             </span>
           </span>
 
